@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomRevitPanel", "AtomRevitPanel\AtomRevitPanel.csproj", "{64954A67-9F4F-4C1A-A2F6-7E75EC0D7FE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PanelView", "PanelView\PanelView.csproj", "{3D098E7D-C875-4A90-9C61-5F5D322DB92C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDockableControl", "SampleDockableControl\SampleDockableControl.csproj", "{54788301-C0EE-42D3-BA8D-73DDEDD8446F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeamsLibUi", "SeamsLibUi\SeamsLibUi.csproj", "{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64954A67-9F4F-4C1A-A2F6-7E75EC0D7FE4}.Debug|x64.ActiveCfg = Debug|x64
+		{64954A67-9F4F-4C1A-A2F6-7E75EC0D7FE4}.Debug|x64.Build.0 = Debug|x64
+		{64954A67-9F4F-4C1A-A2F6-7E75EC0D7FE4}.Release|x64.ActiveCfg = Release|x64
+		{64954A67-9F4F-4C1A-A2F6-7E75EC0D7FE4}.Release|x64.Build.0 = Release|x64
+		{3D098E7D-C875-4A90-9C61-5F5D322DB92C}.Debug|x64.ActiveCfg = Debug|x64
+		{3D098E7D-C875-4A90-9C61-5F5D322DB92C}.Debug|x64.Build.0 = Debug|x64
+		{3D098E7D-C875-4A90-9C61-5F5D322DB92C}.Release|x64.ActiveCfg = Release|x64
+		{3D098E7D-C875-4A90-9C61-5F5D322DB92C}.Release|x64.Build.0 = Release|x64
+		{54788301-C0EE-42D3-BA8D-73DDEDD8446F}.Debug|x64.ActiveCfg = Debug|x64
+		{54788301-C0EE-42D3-BA8D-73DDEDD8446F}.Debug|x64.Build.0 = Debug|x64
+		{54788301-C0EE-42D3-BA8D-73DDEDD8446F}.Release|x64.ActiveCfg = Release|x64
+		{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}.Debug|x64.ActiveCfg = Debug|x64
+		{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}.Debug|x64.Build.0 = Debug|x64
+		{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}.Release|x64.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8ACAAC1-14F3-4A71-906B-78DB55B0CA31}
+	EndGlobalSection
+EndGlobal
