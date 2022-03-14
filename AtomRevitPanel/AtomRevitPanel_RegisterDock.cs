@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Windows.Interop;
+
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.Attributes;
@@ -18,12 +20,17 @@ namespace AtomRevitPanel
     public partial class AtomRevitPanel : IExternalApplication
     {
         public static MainPage dockPanelView = null;
+        //public static MainWindow dockPanelView = null;
         public static Guid dockPanelGuid = new Guid("ABF5C50F-A592-43DB-9DC4-8017CCBE3E0D");
         UIControlledApplication app = null;
 
         public void DockPanelRegister(UIControlledApplication application)
         {
             MainPage dock = new MainPage();
+            dock.ExEvent = exEvent;
+            dock.DefineExecute = defineOuterExecute;
+            //MainWindow dock = new MainWindow(); - black square in dockablepane
+            //WindowInteropHelper interopHelper = new WindowInteropHelper(dock);
             dockPanelView = dock;
             DockablePaneId dockId = new DockablePaneId(dockPanelGuid);
 
@@ -46,5 +53,5 @@ namespace AtomRevitPanel
                 TaskDialog.Show("Info Message", ex.Message);
             }
         }
-    }
+    }   
 }

@@ -26,6 +26,7 @@ namespace AtomRevitPanel
         private ExternalCommandData commandData = null;
         private ElementSet elements = null;
         public MainPage dockPanelView = AtomRevitPanel.dockPanelView;
+        //public MainWindow dockPanelView = AtomRevitPanel.dockPanelView;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {

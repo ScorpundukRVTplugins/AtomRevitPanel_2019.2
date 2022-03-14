@@ -18,6 +18,7 @@ using System.Reflection;
 using Microsoft.Win32;
 
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 
 using Autodesk.Revit.ApplicationServices;
@@ -38,7 +39,18 @@ namespace PanelView
         private ExternalCommandData commandData = null;
 
         private Assembly addinControlAssembly = null;
-        private UserControl addinControl = null;
+        private UserControl addinControl = null;        
+
+        public Action<Action<UIApplication>> DefineExecute
+        {
+            get;
+            set;
+        }
+        public ExternalEvent ExEvent
+        {
+            get;
+            set;
+        }
 
         public MainPage()
         {            
@@ -51,7 +63,8 @@ namespace PanelView
             data.InitialState = new DockablePaneState()
             {
                 DockPosition = DockPosition.Tabbed,
-                TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser
+                TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser,
+                
             };
             data.VisibleByDefault = false;
         }
@@ -72,7 +85,7 @@ namespace PanelView
             viewName.Text = doc.ActiveView.Name;
             
             if(addinControl != null)
-            (addinControl as IRevitAccessProvider).SetRevitAccess(commandData, elements);
+            (addinControl as IRevitAccessProvider<Action<UIApplication>, ExternalEvent>).SetRevitAccess(commandData, elements);
         }
 
         public void AddAddinControl()
@@ -113,14 +126,17 @@ namespace PanelView
             }
 
             Type typeOfcontrol = addinControlAssembly.DefinedTypes
-                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IRevitAccessProvider))).First();
+                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IRevitAccessProvider<Action<UIApplication>, ExternalEvent>))).First();
 
             if(typeOfcontrol != null)
             {
                 TaskDialog.Show("Type if found", $"{typeOfcontrol.Name}");
-                IRevitAccessProvider proxy = Activator.CreateInstance(typeOfcontrol) as IRevitAccessProvider;
+                IRevitAccessProvider<Action<UIApplication>, ExternalEvent> proxy
+                    = Activator.CreateInstance(typeOfcontrol) as IRevitAccessProvider<Action<UIApplication>, ExternalEvent>;
                 proxy.SetRevitAccess(commandData, elementSet);
-                addinControl = proxy.GetControl();
+                proxy.DefineExecute = DefineExecute;
+                proxy.ExEvent = ExEvent;
+                addinControl = proxy.GetControl();                
                 panelGrid.Children.Add(addinControl);
                 System.Windows.Controls.Grid.SetRow(addinControl, 2);
             }
@@ -142,5 +158,56 @@ namespace PanelView
         {
             RemoveAddinControl();
         }
+
+
+        private void externalEventRise_Click(object sender, RoutedEventArgs e)
+        {
+            DefineExecute.Invoke(CheckExternalEvent);
+            // didnt work - outside of revit context
+            try
+            {
+                ExEvent.Raise();
+            }
+            catch
+            {
+
+            }
+            //CommandProvider -= CheckExternalEvent;
+        }
+
+        private void CheckExternalEvent(UIApplication app)
+        {
+            try
+            {
+                using (Transaction trans = new Transaction(app.ActiveUIDocument.Document, "sample"))
+                {
+                    trans.Start();
+                    trans.Commit();
+                }                
+                TaskDialog.Show("VICTORY!", "VICTORY!");
+            }
+            catch(Exception exc)
+            {
+                TaskDialog.Show("Info error", exc.Message);
+            }            
+        }
     }
+
+    public class SampleExternalEvent : IExternalEventHandler
+    {
+        public void Execute(UIApplication app)
+        {
+            using(Transaction trans = new Transaction(app.ActiveUIDocument.Document, "sample"))
+            {
+                trans.Start();
+
+                trans.Commit();
+            }
+        }
+
+        public string GetName()
+        {
+            return nameof(SampleExternalEvent);
+        }
+    }    
 }

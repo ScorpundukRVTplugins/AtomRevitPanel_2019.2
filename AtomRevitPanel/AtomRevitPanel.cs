@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
@@ -19,6 +20,11 @@ namespace AtomRevitPanel
 {
     public partial class AtomRevitPanel : IExternalApplication
     {
+        public ExternalEvent exEvent = null;
+        public Action<Action<UIApplication>> defineOuterExecute;
+        public static Action<UIApplication> outerExecute;
+
+
         public Result OnShutdown(UIControlledApplication application)
         {            
             return Result.Succeeded;
@@ -56,6 +62,18 @@ namespace AtomRevitPanel
                 "hide32.png",
                 "hide16.png");
 
+            defineOuterExecute += DefineExecute;
+
+            try
+            {
+                exEvent = ExternalEvent.Create(new ExternalEventProvider());
+
+            }
+            catch(Exception exc)
+            {
+                TaskDialog.Show("External Event Creation error", exc.Message);
+            }
+            
             DockPanelRegister(application);
             //application.ApplicationClosing += Application_ApplicationClosing;
 
@@ -67,8 +85,19 @@ namespace AtomRevitPanel
             //}
 
             //application.ViewActivated += Application_ViewActivated;
-            
+
+            //app.DockableFrameFocusChanged += App_DockableFrameFocusChanged;
+            //app.ControlledApplication.ApplicationInitialized += ControlledApplication_ApplicationInitialized;
+
+
             return Result.Succeeded;
+        }
+
+        
+
+        private void App_DockableFrameFocusChanged(object sender, DockableFrameFocusChangedEventArgs e)
+        {
+
         }
 
         private void Application_ViewActivated(object sender, ViewActivatedEventArgs e)
@@ -96,6 +125,10 @@ namespace AtomRevitPanel
         //    DockablePane dockablePane = uiapp.GetDockablePane(id);
         //    dockablePane.Hide();
         //}
+        public void DefineExecute(Action<UIApplication> exec)
+        {
+            outerExecute += exec;
+        }
     }
 
     // external command availability
@@ -127,4 +160,30 @@ namespace AtomRevitPanel
             return false;
         }
     }
+
+    public class ExternalEventProvider : IExternalEventHandler
+    {
+        //public Action<UIApplication> CommandProvider
+        //{
+        //    get;
+        //    set;
+        //}
+
+        public void Execute(UIApplication app)
+        {
+            //TaskDialog.Show("ExternalEvent Info", "it works!");
+            if(AtomRevitPanel.outerExecute != null)
+            {
+                AtomRevitPanel.outerExecute.Invoke(app);
+            }
+            AtomRevitPanel.outerExecute = null;
+        }
+
+        public string GetName()
+        {
+            return nameof(ExternalEventProvider);
+        }
+    }
+
+    
 }

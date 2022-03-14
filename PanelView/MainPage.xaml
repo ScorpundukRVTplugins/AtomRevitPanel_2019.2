@@ -34,6 +34,10 @@
                     x:Name="removeAddin"
                     Click="removeAddin_Click"
                     Content="RemoveAssembly" />
+                <Button
+                    x:Name="externalEventRise"
+                    Content="External Event Rise"
+                    Click="externalEventRise_Click"/>
             </StackPanel>
         </Grid>
     </Border>

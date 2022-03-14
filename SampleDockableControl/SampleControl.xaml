@@ -13,8 +13,9 @@
                 Content="Do something in revit"
                 Click="getDocName_Click"/>
             <Button 
-                x:Name="actionButton"
-                Content="Do another action in revit"/>
+                x:Name="selectElement"
+                Content="Select element info"
+                Click="selectElement_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>
