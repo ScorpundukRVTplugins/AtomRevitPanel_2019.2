@@ -19,46 +19,6 @@ namespace AtomRevitPanel
 {
     public partial class AtomRevitPanel : IExternalApplication
     {
-        private RibbonPanel ribbonPanel;
-        public RibbonPanel RibbonPanel
-        {
-            get { return ribbonPanel; }
-            private set { ribbonPanel = value; }
-        }
-
-        private string assemblyPath;
-        public string AssemblyPath
-        {
-            get { return assemblyPath; }
-            private set { assemblyPath = value; }
-        }
-
-        private Assembly addinEntryAssembly;
-        public Assembly AddinEntryAssembly
-        {
-            get { return addinEntryAssembly; }
-            private set { addinEntryAssembly = value; }
-        }
-
-        /* поле с "запасом" - возможно, в будущем
-         * я буду применять более "чистую" архитектуру
-         * тогда понадобится переменная для сборки
-         * с интерфейсом приложения
-         */
-        private Assembly windowPanelAssembly;
-        public Assembly WindowPanelAssembly
-        {
-            get { return windowPanelAssembly; }
-            private set { windowPanelAssembly = value; }
-        }
-
-        private string nameSpace = "AtomRevitPanel";
-        public string NameSpace
-        {
-            get { return nameSpace; }
-            private set { nameSpace = value; }
-        }
-
         public ImageSource GetResourceImage(Assembly assembly, string imageName)
         {
             try

@@ -8,6 +8,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls;
 
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
@@ -21,12 +22,24 @@ using PanelView;
 namespace AtomRevitPanel
 {
     [Transaction(TransactionMode.Manual)]
+    public partial class HidePanel : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
+            DockablePane dockablePane = commandData.Application.GetDockablePane(id);
+            dockablePane.Hide();
+
+            return Result.Succeeded;
+        }
+    }
+
+    [Transaction(TransactionMode.Manual)]
     public class ShowAtomPanel : IExternalCommand
     {
         private ExternalCommandData commandData = null;
         private ElementSet elements = null;
-        public MainPage dockPanelView = AtomRevitPanel.dockPanelView;
-        //public MainWindow dockPanelView = AtomRevitPanel.dockPanelView;
+        public Page dockPanelView = AtomRevitPanel.dockPanelView;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -43,7 +56,7 @@ namespace AtomRevitPanel
             catch (Exception ex)
             {
                 // show error info dialog
-                TaskDialog.Show("Info Message", ex.Message);
+                TaskDialog.Show("DockablePane showing error", ex.Message);
             }
 
             commandData.Application.Application.DocumentOpened +=
@@ -53,18 +66,8 @@ namespace AtomRevitPanel
             commandData.Application.ViewActivated +=
                 Application_ViewActivated;
 
-            commandData.Application.ApplicationClosing += 
-                Application_ApplicationClosing;
-
             // return result
             return Result.Succeeded;
-        }
-
-        private void Application_ApplicationClosing(object sender, ApplicationClosingEventArgs e)
-        {
-            //commandData.Application.Application.DocumentOpened -= Application_DocumentOpened;
-            //commandData.Application.ViewActivated -= Application_ViewActivated;
-            //AtomRevitPanel.dockPanelView = null;
         }
 
         // view activated event
@@ -77,11 +80,6 @@ namespace AtomRevitPanel
         // document opened event
         private void Application_DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
-            //UIApplication uiapp = sender as UIApplication;
-            //DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
-            //DockablePane dockablePane = uiapp.GetDockablePane(id);
-            //dockablePane.Hide();
-
             // provide ExternalCommandData object to dockable page
             dockPanelView.InitiateRevitAccess(commandData, elements);
         }

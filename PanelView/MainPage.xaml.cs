@@ -29,7 +29,8 @@ namespace PanelView
     /// <summary>
     /// Логика взаимодействия для MainPage.xaml
     /// </summary>
-    public partial class MainPage : Page, IDockablePaneProvider
+    [DockablePaneView(true, DockablePaneViewAttribute.AddinDocTypeUsage.Both)]
+    public partial class MainPage : Page, IMainPanelAccess<UIApplication, ExternalEvent>
     {
         private UIApplication uiapp = null;
         private UIDocument uidoc = null;
@@ -41,16 +42,18 @@ namespace PanelView
         private Assembly addinControlAssembly = null;
         private UserControl addinControl = null;        
 
-        public Action<Action<UIApplication>> DefineExecute
+        public Action<Action<UIApplication>> DefineExternalExecute
         {
             get;
             set;
         }
-        public ExternalEvent ExEvent
+        public ExternalEvent ExternalExecuteCaller
         {
             get;
             set;
         }
+
+
 
         public MainPage()
         {            
@@ -134,8 +137,8 @@ namespace PanelView
                 IRevitAccessProvider<Action<UIApplication>, ExternalEvent> proxy
                     = Activator.CreateInstance(typeOfcontrol) as IRevitAccessProvider<Action<UIApplication>, ExternalEvent>;
                 proxy.SetRevitAccess(commandData, elementSet);
-                proxy.DefineExecute = DefineExecute;
-                proxy.ExEvent = ExEvent;
+                proxy.DefineExecute = DefineExternalExecute;
+                proxy.ExEvent = ExternalExecuteCaller;
                 addinControl = proxy.GetControl();                
                 panelGrid.Children.Add(addinControl);
                 System.Windows.Controls.Grid.SetRow(addinControl, 2);
@@ -162,11 +165,11 @@ namespace PanelView
 
         private void externalEventRise_Click(object sender, RoutedEventArgs e)
         {
-            DefineExecute.Invoke(CheckExternalEvent);
+            DefineExternalExecute.Invoke(CheckExternalEvent);
             // didnt work - outside of revit context
             try
             {
-                ExEvent.Raise();
+                ExternalExecuteCaller.Raise();
             }
             catch
             {
@@ -190,24 +193,6 @@ namespace PanelView
             {
                 TaskDialog.Show("Info error", exc.Message);
             }            
-        }
-    }
-
-    public class SampleExternalEvent : IExternalEventHandler
-    {
-        public void Execute(UIApplication app)
-        {
-            using(Transaction trans = new Transaction(app.ActiveUIDocument.Document, "sample"))
-            {
-                trans.Start();
-
-                trans.Commit();
-            }
-        }
-
-        public string GetName()
-        {
-            return nameof(SampleExternalEvent);
-        }
-    }    
+        }        
+    }   
 }

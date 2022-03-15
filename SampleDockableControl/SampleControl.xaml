@@ -14,8 +14,12 @@
                 Click="getDocName_Click"/>
             <Button 
                 x:Name="selectElement"
-                Content="Select element info"
+                Content="Select element sample"
                 Click="selectElement_Click"/>
+            <Button
+                x:Name="changeDetailLevel"
+                Content="Change Detail Level Sample"
+                Click="changeDetailLevel_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

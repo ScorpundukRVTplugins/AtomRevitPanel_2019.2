@@ -20,11 +20,6 @@ namespace AtomRevitPanel
 {
     public partial class AtomRevitPanel : IExternalApplication
     {
-        public ExternalEvent exEvent = null;
-        public Action<Action<UIApplication>> defineOuterExecute;
-        public static Action<UIApplication> outerExecute;
-
-
         public Result OnShutdown(UIControlledApplication application)
         {            
             return Result.Succeeded;
@@ -33,17 +28,19 @@ namespace AtomRevitPanel
         public Result OnStartup(UIControlledApplication application)
         {
             AddNewRibbon(application);
-
-            //AddButtonOnRibbon(
-            //    "Register Window",
-            //    "Register",
-            //    "Register dockable window at the zero document state.",
-            //    typeof(RegisterAtomPanel),
-            //    typeof(CommandAvailability),
-            //    "register32.png",
-            //    "register16.png");
-
             
+            /* Only if you want to register dockablepane manualy
+             * while no opened document in application
+            AddButtonOnRibbon(
+                "Register Window",
+                "Register",
+                "Register dockable window at the zero document state.",
+                typeof(RegisterAtomPanel),
+                typeof(CommandAvailability),
+                "register32.png",
+                "register16.png");
+            */
+
             AddButtonOnRibbon(
                 "Show window",
                 "Show",
@@ -62,77 +59,46 @@ namespace AtomRevitPanel
                 "hide32.png",
                 "hide16.png");
 
-            defineOuterExecute += DefineExecute;
+            DefineExternalExecute += DefineExecute;
 
+            // упаковка в ExternalEvent 
             try
             {
-                exEvent = ExternalEvent.Create(new ExternalEventProvider());
+                ExternalExecuteCaller = ExternalEvent.Create(new ExternalEventProvider());
 
             }
             catch(Exception exc)
             {
                 TaskDialog.Show("External Event Creation error", exc.Message);
             }
-            
+
             DockPanelRegister(application);
-            //application.ApplicationClosing += Application_ApplicationClosing;
-
-            //DockablePaneId id = new DockablePaneId(new Guid("ABF5C50F-A592-43DB-9DC4-8017CCBE3E0D"));
-            //if(id != null)
-            //{
-            //    DockablePane dockablePane = application.GetDockablePane(id);
-            //    dockablePane.Hide();
-            //}
-
-            //application.ViewActivated += Application_ViewActivated;
-
-            //app.DockableFrameFocusChanged += App_DockableFrameFocusChanged;
-            //app.ControlledApplication.ApplicationInitialized += ControlledApplication_ApplicationInitialized;
-
 
             return Result.Succeeded;
         }
 
-        
-
-        private void App_DockableFrameFocusChanged(object sender, DockableFrameFocusChangedEventArgs e)
-        {
-
-        }
 
         private void Application_ViewActivated(object sender, ViewActivatedEventArgs e)
         {
             UIControlledApplication uiconapp = sender as UIControlledApplication;
             DockPanelRegister(uiconapp);
-
-            //DockablePaneId id = new DockablePaneId(new Guid("ABF5C50F-A592-43DB-9DC4-8017CCBE3E0D"));
-            ////
-            //if (!DockablePane.PaneIsRegistered(id))
-            //{
-            //}
-            //else
-            //{
-            //    DockablePane dockablePane = uiconapp.GetDockablePane(id);
-            //    dockablePane.Hide();
-            //}
         }
 
-        //private void Application_ApplicationClosing(object sender, ApplicationClosingEventArgs e)
-        //{
-        //    UIApplication uiapp = sender as UIApplication;
-
-        //    DockablePaneId id = new DockablePaneId(new Guid("ABF5C50F-A592-43DB-9DC4-8017CCBE3E0D"));
-        //    DockablePane dockablePane = uiapp.GetDockablePane(id);
-        //    dockablePane.Hide();
-        //}
+        // методя для передачи с делегатом DefineOuterExecute
+        // вов
         public void DefineExecute(Action<UIApplication> exec)
         {
-            outerExecute += exec;
+            RunExternalExecute += exec;
+        }
+
+        public static void DeleteDefineExecute()
+        {
+            RunExternalExecute = null;
         }
     }
 
-    // external command availability
-    /* 
+     
+    /* external command availability
      * класс, обеспечивающий проверку возможности
      * запуска команды регистрации DockablePane 
      * дело в том, что по какой-то причине 
@@ -142,7 +108,7 @@ namespace AtomRevitPanel
      * 
      * Tammik: You can only register a dockable dialog in "Zero doc state"
      * 
-     * думаю, что следует переносить регистрацию DockablePane
+     * я перенёс регистрацию DockablePane
      * в метод OnStartUp приложения, чтобы пользователю
      * не надо было помнить, что окно должно создаваться 
     */
@@ -161,29 +127,23 @@ namespace AtomRevitPanel
         }
     }
 
+    // специальный класс для вызова методов за пределами контекста
+    // выполнения Revit
+    // его метод Execute вызывается через экземпляр ExternalEvent
     public class ExternalEventProvider : IExternalEventHandler
     {
-        //public Action<UIApplication> CommandProvider
-        //{
-        //    get;
-        //    set;
-        //}
-
         public void Execute(UIApplication app)
         {
-            //TaskDialog.Show("ExternalEvent Info", "it works!");
-            if(AtomRevitPanel.outerExecute != null)
+            if(AtomRevitPanel.RunExternalExecute != null)
             {
-                AtomRevitPanel.outerExecute.Invoke(app);
+                AtomRevitPanel.RunExternalExecute.Invoke(app);
             }
-            AtomRevitPanel.outerExecute = null;
+            AtomRevitPanel.DeleteDefineExecute();
         }
 
         public string GetName()
         {
             return nameof(ExternalEventProvider);
         }
-    }
-
-    
+    }    
 }

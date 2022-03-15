@@ -13,13 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 using System.Threading;
 
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
 using SeamsLibUi;
-using System.Diagnostics;
 
 namespace SampleDockableControl
 {
@@ -80,35 +82,34 @@ namespace SampleDockableControl
             MessageBox.Show(doc.PathName.ToString().Split('\\').Last());
         }
 
-        private void OuterExec(UIApplication app)
-        {
-
-        }
-
         private void selectElement_Click(object sender, RoutedEventArgs e)
         {
-            DefineExecute.Invoke(OldExec);
+            DefineExecute.Invoke(ExecSelectionSample);
             ExEvent.Raise();
         }
 
-        public void OldExec(UIApplication app)
+        private void changeDetailLevel_Click(object sender, RoutedEventArgs e)
         {
-            Process proc = Process.GetCurrentProcess();
+            DefineExecute.Invoke(ExecTransactionSample);
+            ExEvent.Raise();
+        }
 
-            TaskDialog.Show("Process info", proc.ProcessName);
-
+        public void ExecTransactionSample(UIApplication app)
+        {
             try
             {
                 using (Transaction trans = new Transaction(doc, "change detail level"))
                 {
                     trans.Start();
-
                     ViewDetailLevel dl = uidoc.ActiveView.DetailLevel;
-                    ////uidoc.RefreshActiveView();
-                    uidoc.ActiveView.DetailLevel = ViewDetailLevel.Coarse;
-                    uidoc.RefreshActiveView();
-                    //uidoc.ActiveView.DetailLevel = dl;
-
+                    if(dl == ViewDetailLevel.Fine)
+                    {
+                        uidoc.ActiveView.DetailLevel = ViewDetailLevel.Coarse;
+                    }
+                    else
+                    {
+                        uidoc.ActiveView.DetailLevel = ViewDetailLevel.Fine;
+                    }
                     trans.Commit();
                 }
             }
@@ -116,23 +117,25 @@ namespace SampleDockableControl
             {
                 TaskDialog.Show("Detail level change error", exc.Message);
             }
+        }
 
+        public void ExecSelectionSample(UIApplication app)
+        {
+            UIDocument uidoc = app.ActiveUIDocument;
+            Document doc = uidoc.Document;
             Element elem = null;
+            Reference elemRef = null;
 
-            //try
-            //{
-            //    uidoc.ActiveView = activeView;
-            //}
-            //catch(Exception exc)
-            //{
-            //    TaskDialog.Show("Info", exc.Message);
-            //}
-
-            uidoc.RequestViewChange(uidoc.ActiveView);
+            TaskDialog.Show("ACTION AD", "Please click in view, then select element");
+            try
+            {
+                XYZ pointRef = uidoc.Selection.PickPoint();
+            }
+            catch { }
 
             try
             {
-                Reference elemRef = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element);
+                elemRef = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element);
                 ElementId elemId = elemRef.ElementId;
                 elem = doc.GetElement(elemId);
             }
@@ -143,49 +146,6 @@ namespace SampleDockableControl
 
             if (elem != null)
                 TaskDialog.Show("Element info", elem.Name);
-        }
-    }
-
-    public class SampleInContextCommand : IExternalEventHandler
-    {
-        UIDocument uidoc = null;
-        Autodesk.Revit.ApplicationServices.Application app = null;
-        Document doc = null;
-
-        public void Execute(UIApplication uiapp)
-        {
-            uidoc = uiapp.ActiveUIDocument;
-            app = uiapp.Application;
-            doc = uidoc.Document;
-
-            Process proc = Process.GetCurrentProcess();
-
-            TaskDialog.Show("External Event Info", proc.ProcessName);
-
-            try
-            {
-                using (Transaction trans = new Transaction(doc, "change detail level"))
-                {
-                    trans.Start();
-
-                    //ViewDetailLevel dl = uidoc.ActiveView.DetailLevel;
-                    ////uidoc.RefreshActiveView();
-                    //uidoc.ActiveView.DetailLevel = ViewDetailLevel.Medium;
-                    ////uidoc.RefreshActiveView();
-                    //uidoc.ActiveView.DetailLevel = dl;
-
-                    trans.Commit();
-                }
-            }
-            catch (Exception exc)
-            {
-                TaskDialog.Show("Detail level change error", exc.Message);
-            }
-        }
-
-        public string GetName()
-        {
-            return "SampleInContextCommand";
-        }
+        }        
     }
 }
