@@ -60,8 +60,8 @@ namespace AtomRevitPanel
                 "hide16.png");
 
             DefineExternalExecute += DefineExecute;
-
-            // упаковка в ExternalEvent 
+            application.ControlledApplication.DocumentChanged += ControlledApplication_DocumentChanged;
+            // определение ExternalEvent
             try
             {
                 ExternalExecuteCaller = ExternalEvent.Create(new ExternalEventProvider());
@@ -72,31 +72,35 @@ namespace AtomRevitPanel
                 TaskDialog.Show("External Event Creation error", exc.Message);
             }
 
-            DockPanelRegister(application);
+            if (!DockPanelRegister(application)) return Result.Failed;
 
             return Result.Succeeded;
         }
 
-
-        private void Application_ViewActivated(object sender, ViewActivatedEventArgs e)
+        private void ControlledApplication_DocumentChanged(object sender, DocumentChangedEventArgs e)
         {
-            UIControlledApplication uiconapp = sender as UIControlledApplication;
-            DockPanelRegister(uiconapp);
+            dockAccess.ContextEventUpdate();
         }
 
-        // методя для передачи с делегатом DefineOuterExecute
-        // вов
+        /* методя для передачи с делегатом DefineExternalExecute
+         * будет вызваться вне контекста приложения
+         * где-то на главной странице DockablePane
+         * или в контроле дополнения
+         * 
+         * через него в контекст Revit передаётся метод извне контекста
+         */
         public void DefineExecute(Action<UIApplication> exec)
-        {
+        {            
             RunExternalExecute += exec;
-        }
+        }        
 
+        /* переданный метод обнуляется 
+         */
         public static void DeleteDefineExecute()
         {
             RunExternalExecute = null;
         }
     }
-
      
     /* external command availability
      * класс, обеспечивающий проверку возможности
@@ -127,17 +131,21 @@ namespace AtomRevitPanel
         }
     }
 
-    // специальный класс для вызова методов за пределами контекста
-    // выполнения Revit
-    // его метод Execute вызывается через экземпляр ExternalEvent
+    /* специальный класс для вызова методов за пределами контекста
+     * выполнения Revit, что особенно характерно для плагинов с 
+     * с интерфейсом на основе DockablePane
+     * его метод Execute вызывается через экземпляр ExternalEvent
+     */
     public class ExternalEventProvider : IExternalEventHandler
     {
         public void Execute(UIApplication app)
         {
             if(AtomRevitPanel.RunExternalExecute != null)
             {
+                // запуск переданного извне контекста Revit метода
                 AtomRevitPanel.RunExternalExecute.Invoke(app);
             }
+            // обнуление
             AtomRevitPanel.DeleteDefineExecute();
         }
 

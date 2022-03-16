@@ -25,26 +25,22 @@ namespace AtomRevitPanel
 {
     public partial class AtomRevitPanel : IExternalApplication
     {
-        public void DockPanelRegister(UIControlledApplication application)
+        public bool DockPanelRegister(UIControlledApplication application)
         {
-            IMainPanelAccess<UIApplication, ExternalEvent> dock = null;
-
             try
             {
-                dock = FindPanelViewAssembly() as IMainPanelAccess<UIApplication,ExternalEvent>;
+                dockAccess = FindPanelViewAssembly() as IMainDockPanel;
+                (dockAccess as IRevitContextAccess).ExternalExecuteCaller  = ExternalExecuteCaller;
+                (dockAccess as IRevitContextAccess).DefineExternalExecute = DefineExternalExecute;
             }
             catch(Exception exc)
             {
                 TaskDialog.Show("Main panel view assembly search error", exc.Message);
-            }
+                return false;
+            }           
 
-            dockPanelView = 
-
-            dock.ExternalExecuteCaller = ExternalExecuteCaller;
-            dock.DefineExternalExecute = DefineExternalExecute;
 
             DockablePaneId dockId = new DockablePaneId(dockPanelGuid);
-
             try
             {
                 //register dockable panel                
@@ -52,7 +48,7 @@ namespace AtomRevitPanel
                     (
                         dockId,
                         "Atom Revit Panel",
-                        dockPanelView
+                        dockAccess.GetDockProvider()
                     );
 
             }
@@ -60,24 +56,41 @@ namespace AtomRevitPanel
             {
                 // show error info dialog
                 TaskDialog.Show("Info Message", ex.Message);
+                return false;
             }
+            return true;
         }
 
-        public Page FindPanelViewAssembly()
+        /* поиск сборки, содержащей страницу WPF (WPF Page)
+         * с интерфейсом IMainDockPanel
+         * Тип страницы с интерфейсом IDockablePaneProvider 
+         * может содержаться и в других сборках
+         * но не будет подходить к данному приложению
+         */
+        public IMainDockPanel FindPanelViewAssembly()
         {
-            string addinFolder = Assembly.GetExecutingAssembly().Location;
-
+            string addinAssembly = Assembly.GetExecutingAssembly().Location;
+            string addinFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             DirectoryInfo addinFolderInfo = new DirectoryInfo(addinFolder);
             FileInfo[] files = addinFolderInfo.GetFiles("*.dll");
+            int count = files.Length;
             foreach (FileInfo file in files)
             {
+                Type mainPanelViewType = null;
                 Assembly potentialMainPanelView = Assembly.Load(file.FullName);
-                Type mainPanelViewType = (from t in potentialMainPanelView.DefinedTypes
-                                          where t.ImplementedInterfaces.Contains(typeof(IMainPanelAccess<UIApplication, ExternalEvent>))
-                                          select t).First();
+                string name = potentialMainPanelView.GetName().Name;
+
+                try
+                {
+                    mainPanelViewType = (from t in potentialMainPanelView.DefinedTypes
+                                         where t.GetInterfaces().Contains(typeof(IMainDockPanel))
+                                         select t).First();
+                }
+                catch { }
+
                 if(mainPanelViewType != null && mainPanelViewType.BaseType == typeof(Page))
                 {
-                    return Activator.CreateInstance(mainPanelViewType) as Page;
+                    return Activator.CreateInstance(mainPanelViewType) as IMainDockPanel;
                 }
             }
             return null;

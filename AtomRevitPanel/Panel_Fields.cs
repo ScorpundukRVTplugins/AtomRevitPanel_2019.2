@@ -19,34 +19,45 @@ using Autodesk.Revit.UI.Events;
 using System.Windows;
 using System.Windows.Controls;
 
+using SeamsLibUi;
+
 namespace AtomRevitPanel
 {
     public partial class AtomRevitPanel : IExternalApplication
     {
-        public static Page dockPanelView = null;
+        public static IMainDockPanel dockAccess;
+
         public static Guid dockPanelGuid = new Guid("ABF5C50F-A592-43DB-9DC4-8017CCBE3E0D");
 
-        // передаётся во внешний контекст
-        // во внешнем контексте вызывается метод Raise
-        // запускающий метод Execute экземпляра типа ExternalEventProvider
+        /* передаётся во внешний контекст
+         * во внешнем контексте вызывается метод Raise
+         * запускающий метод Execute экземпляра типа ExternalEventProvider
+         *
+         * передача в главную страницу DockablePane
+         * а из неё в подключённый UserControl
+         */
         public ExternalEvent ExternalExecuteCaller = null;
 
-        // делегат для передачи извне контекста Revit
-        // методa для исполнения в экземпляре ExternalEventProvider
-        // упакованного в экземпляр ExternalEvent (ExEvent)
+        /* делегат для передачи извне контекста Revit
+         * методa для исполнения в экземпляре ExternalEventProvider
+         * упакованного в экземпляр ExternalEvent (ExEvent)
+         */
         public Action<Action<UIApplication>> DefineExternalExecute;
 
-        // статическое свойство, содержащее метод
-        // для исполнения, переданный извне контекста Revit
-        // передаётся через делегат DefineOuterExecute
-        // переданный во внешний контекст
+       /* статическое свойство, содержащее метод
+        * для исполнения, переданный извне контекста Revit
+        * передаётся через делегат DefineOuterExecute
+        * переданный во внешний контекст
+        */
         public static Action<UIApplication> RunExternalExecute
         {
             get;
             set;
         }
 
-        // панель для 
+        /* Раздел вкладки приложения
+         * 
+         */
         private RibbonPanel ribbonPanel;
         public RibbonPanel RibbonPanel
         {

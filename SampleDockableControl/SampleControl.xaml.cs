@@ -28,21 +28,21 @@ namespace SampleDockableControl
     /// <summary>
     /// Логика взаимодействия для UserControl2.xaml
     /// </summary>
-    public partial class SampleControl : UserControl , IRevitAccessProvider<Action<UIApplication>, ExternalEvent>
+    public partial class SampleControl : UserControl , IRevitContextAccess
     {
-        private UIApplication uiapp = null;
-        private UIDocument uidoc = null;
-        private Autodesk.Revit.ApplicationServices.Application app = null;
-        private Document doc = null;
+        private ControlViewModel viewModel;
+        public IPanelControlViewModel ViewModel
+        {
+            get { return null; }
+            set { viewModel = (ControlViewModel)value; }
+        }
 
-        private ElementSet elementSet = null;
-
-        public Action<Action<UIApplication>> DefineExecute
+        public Action<Action<UIApplication>> DefineExternalExecute
         {
             get;
             set;
         }
-        public ExternalEvent ExEvent
+        public ExternalEvent ExternalExecuteCaller
         {
             get;
             set;
@@ -53,23 +53,16 @@ namespace SampleDockableControl
             InitializeComponent();
         }
 
-        public void SetRevitAccess(object uiapp, object uidoc, object app, object doc, object elementSet)
+        public object GetViewElement()
         {
-            this.uiapp = uiapp as UIApplication;
-            this.uidoc = uidoc as UIDocument;
-            this.app = app as Autodesk.Revit.ApplicationServices.Application;
-            this.doc = doc as Document;
-            this.elementSet = elementSet as ElementSet;
+            return this as object;
         }
 
-        public void SetRevitAccess(object commandData, object elementSet)
+        public void UpdateView(UIApplication uiapplication)
         {
-            ExternalCommandData cd = commandData as ExternalCommandData;
-            this.uiapp = cd.Application;
-            this.uidoc = uiapp.ActiveUIDocument;
-            this.app = uiapp.Application;
-            this.doc = uidoc.Document;
-            this.elementSet = elementSet as ElementSet;
+            UIDocument uidoc = uiapplication.ActiveUIDocument;
+            var app = uiapplication.Application;
+            Document doc = uidoc.Document;
         }
 
         public UserControl GetControl()
@@ -79,23 +72,34 @@ namespace SampleDockableControl
 
         private void getDocName_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(doc.PathName.ToString().Split('\\').Last());
+            DefineExternalExecute.Invoke(GetDocName);
+            ExternalExecuteCaller.Raise();
         }
+
 
         private void selectElement_Click(object sender, RoutedEventArgs e)
         {
-            DefineExecute.Invoke(ExecSelectionSample);
-            ExEvent.Raise();
+            DefineExternalExecute.Invoke(ExecSelectionSample);
+            ExternalExecuteCaller.Raise();
         }
 
         private void changeDetailLevel_Click(object sender, RoutedEventArgs e)
         {
-            DefineExecute.Invoke(ExecTransactionSample);
-            ExEvent.Raise();
+            DefineExternalExecute.Invoke(ExecTransactionSample);
+            ExternalExecuteCaller.Raise();
+        }
+
+        private void GetDocName(UIApplication uiapp)
+        {
+            Document doc = uiapp.ActiveUIDocument.Document;
+            MessageBox.Show(doc.PathName.ToString().Split('\\').Last());
         }
 
         public void ExecTransactionSample(UIApplication app)
         {
+            UIDocument uidoc = app.ActiveUIDocument;
+            Document doc = uidoc.Document;
+
             try
             {
                 using (Transaction trans = new Transaction(doc, "change detail level"))

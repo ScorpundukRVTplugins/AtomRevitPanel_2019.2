@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDockableControl", "Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeamsLibUi", "SeamsLibUi\SeamsLibUi.csproj", "{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMovingControl", "SampleMovingControl\SampleMovingControl.csproj", "{D3CF63CE-B198-430D-B1E8-D7A81630B6C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleParameterChangingControl", "SampleParameterChangingControl\SampleParameterChangingControl.csproj", "{36F6EE71-5A59-4764-8DB0-08CB1033FBDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolsForMVVM", "ToolsForMVVM\ToolsForMVVM.csproj", "{40150A96-D034-45B1-9141-4A2EEA54DBF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +37,14 @@ Global
 		{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}.Debug|x64.ActiveCfg = Debug|x64
 		{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}.Debug|x64.Build.0 = Debug|x64
 		{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}.Release|x64.ActiveCfg = Release|x64
+		{D3CF63CE-B198-430D-B1E8-D7A81630B6C6}.Debug|x64.ActiveCfg = Debug|x64
+		{D3CF63CE-B198-430D-B1E8-D7A81630B6C6}.Debug|x64.Build.0 = Debug|x64
+		{D3CF63CE-B198-430D-B1E8-D7A81630B6C6}.Release|x64.ActiveCfg = Release|x64
+		{36F6EE71-5A59-4764-8DB0-08CB1033FBDC}.Debug|x64.ActiveCfg = Debug|x64
+		{36F6EE71-5A59-4764-8DB0-08CB1033FBDC}.Debug|x64.Build.0 = Debug|x64
+		{36F6EE71-5A59-4764-8DB0-08CB1033FBDC}.Release|x64.ActiveCfg = Release|x64
+		{40150A96-D034-45B1-9141-4A2EEA54DBF1}.Debug|x64.ActiveCfg = Debug|x64
+		{40150A96-D034-45B1-9141-4A2EEA54DBF1}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

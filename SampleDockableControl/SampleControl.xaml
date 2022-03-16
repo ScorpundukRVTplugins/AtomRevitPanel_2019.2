@@ -6,6 +6,11 @@
              xmlns:local="clr-namespace:SampleDockableControl"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.DataContext>
+        <local:ControlViewModel/>
+    </UserControl.DataContext>
+    
     <Grid>
         <StackPanel>
             <Button 

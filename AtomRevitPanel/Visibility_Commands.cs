@@ -18,6 +18,7 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.UI.Events;
 
 using PanelView;
+using SeamsLibUi;
 
 namespace AtomRevitPanel
 {
@@ -39,7 +40,7 @@ namespace AtomRevitPanel
     {
         private ExternalCommandData commandData = null;
         private ElementSet elements = null;
-        public Page dockPanelView = AtomRevitPanel.dockPanelView;
+        public Page dockPanelView = (AtomRevitPanel.dockAccess as IRevitContextAccess).GetViewElement() as Page;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -50,8 +51,9 @@ namespace AtomRevitPanel
                 // dockable window id
                 DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
                 DockablePane dockableWindow = commandData.Application.GetDockablePane(id);
+                (AtomRevitPanel.dockAccess as IRevitContextAccess).UpdateView(commandData.Application);
+
                 dockableWindow.Show();
-                dockPanelView.InitiateRevitAccess(commandData, elements);
             }
             catch (Exception ex)
             {
@@ -70,18 +72,25 @@ namespace AtomRevitPanel
             return Result.Succeeded;
         }
 
-        // view activated event
+        /* view activated event
+         * срабатывает когда открывается или переключается новый вид
+         */
         public void Application_ViewActivated(object sender, ViewActivatedEventArgs e)
         {
             // provide ExternalCommandData object to dockable page
-            dockPanelView.InitiateRevitAccess(commandData, elements);
+            //dockPanelView.InitiateRevitAccess(commandData, elements);
+            (AtomRevitPanel.dockAccess as IRevitContextAccess).UpdateView(commandData.Application);
 
         }
-        // document opened event
+
+        /* document opened event
+         * срабатывает когда открывается новый документ - в этом случае также срабатывает 
+         * и ViewActivated
+         */
         private void Application_DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
             // provide ExternalCommandData object to dockable page
-            dockPanelView.InitiateRevitAccess(commandData, elements);
+            (AtomRevitPanel.dockAccess as IRevitContextAccess).UpdateView(commandData.Application);
         }
     }
 }

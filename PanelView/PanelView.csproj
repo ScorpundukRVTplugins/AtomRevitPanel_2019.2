@@ -66,6 +66,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainPage_Buttons.cs" />
+    <Compile Include="MainPage_IDockablePaneProvider.cs" />
+    <Compile Include="MainPage_IMainDockPanel.cs" />
+    <Compile Include="MainPage_IRevitContextAccess.cs" />
+    <Compile Include="MainPage_ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -96,6 +101,11 @@
     <ProjectReference Include="..\SeamsLibUi\SeamsLibUi.csproj">
       <Project>{6dc2ca5c-53a7-45df-b4d4-c2670cb86ff3}</Project>
       <Name>SeamsLibUi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolsForMVVM\ToolsForMVVM.csproj">
+      <Project>{40150a96-d034-45b1-9141-4a2eea54dbf1}</Project>
+      <Name>ToolsForMVVM</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

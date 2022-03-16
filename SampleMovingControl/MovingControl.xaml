@@ -1,0 +1,37 @@
+﻿<UserControl
+    x:Class="SampleMovingControl.MovingControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SampleMovingControl"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="300"
+    Background="LightGreen"
+    mc:Ignorable="d">
+
+    <UserControl.DataContext>
+        <local:ControlViewModel />
+    </UserControl.DataContext>
+
+    <Grid>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button
+                    x:Name="selection"
+                    Grid.Column="0"
+                    Height="24"
+                    Content="Selet Items" />
+                <Button Grid.Column="1" Height="24" />
+                <Button Grid.Column="2" Height="24" />
+            </Grid>
+            <Slider />
+            <ListView />
+        </StackPanel>
+    </Grid>
+</UserControl>
