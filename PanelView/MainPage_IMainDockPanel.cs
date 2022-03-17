@@ -96,23 +96,34 @@ namespace PanelView
             }
 
             Type typeOfcontrol = addinControlAssembly.DefinedTypes
-                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IRevitContextAccess))).First();;
+                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IRevitContextAccess))).First();
+
+            Type typeOfViewModel = addinControlAssembly.DefinedTypes
+                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IPanelControlViewModel))).First();
 
             if (typeOfcontrol != null)
             {
                 //TaskDialog.Show("Type if found", $"{typeOfcontrol.Name}");
-                IRevitContextAccess proxy
+                IRevitContextAccess controlView
                     = Activator.CreateInstance(typeOfcontrol) as IRevitContextAccess;
 
-                DefineExternalExecute( (UIApplication uiapp) => proxy.UpdateView(uiapp));
+                IPanelControlViewModel controlViewModel
+                    = Activator.CreateInstance(typeOfViewModel) as IPanelControlViewModel;
+
+                DefineExternalExecute( (UIApplication uiapp) => controlView.UpdateView(uiapp));
                 ExternalExecuteCaller.Raise();
 
-                proxy.DefineExternalExecute = DefineExternalExecute;
-                proxy.ExternalExecuteCaller = ExternalExecuteCaller;
-                addinControl = proxy.GetViewElement() as UserControl;
+                controlView.DefineExternalExecute = DefineExternalExecute;
+                controlView.ExternalExecuteCaller = ExternalExecuteCaller;
+                controlViewModel.DefineExternalExecute = DefineExternalExecute;
+                controlViewModel.ExternalExecuteCaller = ExternalExecuteCaller;
+
+                controlView.ViewModel = controlViewModel;
+                controlView.SetDataContext();
+
+                addinControl = controlView.GetViewElement() as UserControl;
                 panelGrid.Children.Add(addinControl);
-                proxy.ViewModel.SetDefineExternalExecute(DefineExternalExecute);
-                proxy.ViewModel.SefExternalExecuteCaller(ExternalExecuteCaller);
+                
                 System.Windows.Controls.Grid.SetRow(addinControl, 2);
             }
         }

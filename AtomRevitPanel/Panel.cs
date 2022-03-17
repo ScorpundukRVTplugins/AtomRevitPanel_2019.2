@@ -146,7 +146,7 @@ namespace AtomRevitPanel
                 AtomRevitPanel.RunExternalExecute.Invoke(app);
             }
             // обнуление
-            AtomRevitPanel.DeleteDefineExecute();
+            AtomRevitPanel.RunExternalExecute = null;
         }
 
         public string GetName()

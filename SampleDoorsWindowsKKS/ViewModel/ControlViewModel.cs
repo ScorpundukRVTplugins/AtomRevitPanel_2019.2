@@ -30,11 +30,14 @@ namespace SampleDoorsWindowsKKS
 
             List<Element> doors = new List<Element>();
 
+            TaskDialog.Show("It is me", "command from view model");
+
             try
             {
                 ElementCategoryFilter doorCategoryFilter = new ElementCategoryFilter(BuiltInCategory.OST_Doors);
                 FilteredElementCollector doorCollector = new FilteredElementCollector(doc);
                 doors = (List<Element>)(doorCollector.WherePasses(doorCategoryFilter).WhereElementIsElementType().ToElements());
+                TaskDialog.Show("Doors", doors.Count.ToString());
             }
             catch (Exception exc)
             {
@@ -48,20 +51,14 @@ namespace SampleDoorsWindowsKKS
             }
         }
 
-        public void SetDefineExternalExecute(Action<Action<UIApplication>> defineExecute)
-        {
-            DefineExternalExecute = defineExecute;
-        }
-
-        public void SefExternalExecuteCaller(ExternalEvent exEvent)
-        {
-            ExternalExecuteCaller = exEvent;
-        }
 
         private ObservableCollection<DoorPresenter> doorsList;
         public ObservableCollection<DoorPresenter> DoorsList
         {
-            get { return doorsList; }
+            get 
+            {
+                if (doorsList == null) doorsList = new ObservableCollection<DoorPresenter>();
+                return doorsList; }
             set
             {
                 doorsList = value;

@@ -12,14 +12,7 @@ namespace PanelView
 {
     public class MainPageViewModel : ViewModelBase, IPanelControlViewModel
     {
-        public void SefExternalExecuteCaller(ExternalEvent exEvent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetDefineExternalExecute(Action<Action<UIApplication>> defineExecute)
-        {
-            throw new NotImplementedException();
-        }
+        public Action<Action<UIApplication>> DefineExternalExecute { get; set; }
+        public ExternalEvent ExternalExecuteCaller { get; set; }
     }
 }

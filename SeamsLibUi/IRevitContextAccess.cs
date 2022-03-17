@@ -16,5 +16,6 @@ namespace SeamsLibUi
         Action<Action<UIApplication>> DefineExternalExecute { get; set; }        
         ExternalEvent ExternalExecuteCaller { get; set; }
         IPanelControlViewModel ViewModel { get; set; }
+        void SetDataContext();
     }    
 }

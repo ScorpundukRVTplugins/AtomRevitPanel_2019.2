@@ -35,11 +35,17 @@ namespace PanelView
         private UserControl addinControl = null;
 
         //это пока что на вырост
-        private MainPageViewModel viewModel;
-        public IPanelControlViewModel ViewModel
+        //private MainPageViewModel viewModel;
+        //public IPanelControlViewModel ViewModel
+        //{
+        //    get { return null; }
+        //    set { viewModel = (MainPageViewModel)value; }
+        //}
+        public IPanelControlViewModel ViewModel { get; set; }
+
+        public void SetDataContext()
         {
-            get { return null; }
-            set { viewModel = (MainPageViewModel)value; }
+            DataContext = ViewModel;
         }
 
         public MainPage()

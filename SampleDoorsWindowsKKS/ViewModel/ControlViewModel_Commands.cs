@@ -36,8 +36,10 @@ namespace SampleDoorsWindowsKKS
 
         public void DeleteVSSetsExecute(object parameter)
         {
+            bool full = doorsList == null;
             DefineExternalExecute(CollectDoors);
             ExternalExecuteCaller.Raise();
+            TaskDialog.Show("From Execute", doorsList.Count.ToString());
         }
 
         public bool DeleteVSSetsCanExecute(object parameter)

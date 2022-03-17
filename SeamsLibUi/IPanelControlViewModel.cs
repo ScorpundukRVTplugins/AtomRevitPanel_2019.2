@@ -9,7 +9,7 @@ namespace SeamsLibUi
 {
     public interface IPanelControlViewModel
     {
-        void SetDefineExternalExecute(Action<Action<UIApplication>> defineExecute);
-        void SefExternalExecuteCaller(ExternalEvent exEvent);
+        Action<Action<UIApplication>> DefineExternalExecute { get; set; }
+        ExternalEvent ExternalExecuteCaller { get; set; }
     }
 }

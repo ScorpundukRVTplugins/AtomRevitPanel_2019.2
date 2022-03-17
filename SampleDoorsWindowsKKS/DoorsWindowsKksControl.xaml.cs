@@ -29,20 +29,13 @@ namespace SampleDoorsWindowsKKS
     {
         public DoorsWindowsKksControl()
         {
-            ViewModel = new ControlViewModel();
-            DataContext = viewModel;
             InitializeComponent();
         }
 
         public Action<Action<UIApplication>> DefineExternalExecute { get; set; }
         public ExternalEvent ExternalExecuteCaller { get; set; }
-
-        private ControlViewModel viewModel;
-        public IPanelControlViewModel ViewModel
-        {
-            get { return viewModel as IPanelControlViewModel; }
-            set { viewModel = (ControlViewModel)value; }
-        }
+        
+        public IPanelControlViewModel ViewModel { get; set; }
 
         public object GetViewElement()
         {
@@ -56,6 +49,10 @@ namespace SampleDoorsWindowsKKS
             Document doc = uidoc.Document;
         }
 
+        public void SetDataContext()
+        {
+            DataContext = ViewModel as ControlViewModel;
+        }
         
     }
 }
