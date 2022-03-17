@@ -1,0 +1,26 @@
+﻿<UserControl
+    x:Class="SampleDoorsWindowsKKS.DoorsWindowsKksControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SampleDoorsWindowsKKS"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="250"
+    mc:Ignorable="d">
+    <UserControl.DataContext>
+        <local:ControlViewModel />
+    </UserControl.DataContext>
+
+    <Grid>
+        <StackPanel>
+            <Button
+                x:Name="showAllDoors"
+                Command="{Binding CollectDoorsCmd}"
+                Content="Collect doors" />
+            <Button x:Name="undefined1" Content="undefined1" />
+            <Button x:Name="undefined2" Content="undefined2" />
+            <ListView ItemsSource="{Binding DoorsList, Mode=TwoWay}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -111,6 +111,8 @@ namespace PanelView
                 proxy.ExternalExecuteCaller = ExternalExecuteCaller;
                 addinControl = proxy.GetViewElement() as UserControl;
                 panelGrid.Children.Add(addinControl);
+                proxy.ViewModel.SetDefineExternalExecute(DefineExternalExecute);
+                proxy.ViewModel.SefExternalExecuteCaller(ExternalExecuteCaller);
                 System.Windows.Controls.Grid.SetRow(addinControl, 2);
             }
         }

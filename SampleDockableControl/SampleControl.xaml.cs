@@ -33,7 +33,7 @@ namespace SampleDockableControl
         private ControlViewModel viewModel;
         public IPanelControlViewModel ViewModel
         {
-            get { return null; }
+            get { return viewModel; }
             set { viewModel = (ControlViewModel)value; }
         }
 

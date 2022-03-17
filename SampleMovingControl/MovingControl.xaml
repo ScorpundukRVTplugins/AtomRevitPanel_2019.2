@@ -30,8 +30,13 @@
                 <Button Grid.Column="1" Height="24" />
                 <Button Grid.Column="2" Height="24" />
             </Grid>
-            <Slider />
-            <ListView />
+            <Slider 
+                SelectionStart="0"
+                SelectionEnd="10"
+                />
+            <ListView
+                ItemsSource=""
+                />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -16,21 +16,26 @@ using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
-using SeamsLibUi;
 
-namespace SampleMovingControl
+using SeamsLibUi;
+using MVVM;
+
+namespace SampleDoorsWindowsKKS
 {
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class MovingControl : UserControl, IRevitContextAccess
+    public partial class DoorsWindowsKksControl : UserControl, IRevitContextAccess
     {
-        public MovingControl()
+        public DoorsWindowsKksControl()
         {
             ViewModel = new ControlViewModel();
             DataContext = viewModel;
             InitializeComponent();
         }
+
+        public Action<Action<UIApplication>> DefineExternalExecute { get; set; }
+        public ExternalEvent ExternalExecuteCaller { get; set; }
 
         private ControlViewModel viewModel;
         public IPanelControlViewModel ViewModel
@@ -39,12 +44,9 @@ namespace SampleMovingControl
             set { viewModel = (ControlViewModel)value; }
         }
 
-        public Action<Action<UIApplication>> DefineExternalExecute { get; set; }
-        public ExternalEvent ExternalExecuteCaller { get; set; }
-
         public object GetViewElement()
         {
-            return this as object;
+            return this;
         }
 
         public void UpdateView(UIApplication uiapplication)
@@ -53,5 +55,7 @@ namespace SampleMovingControl
             var app = uiapplication.Application;
             Document doc = uidoc.Document;
         }
+
+        
     }
 }

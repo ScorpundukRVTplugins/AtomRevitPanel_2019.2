@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleParameterChangingCont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolsForMVVM", "ToolsForMVVM\ToolsForMVVM.csproj", "{40150A96-D034-45B1-9141-4A2EEA54DBF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDoorsWindowsKKS", "SampleDoorsWindowsKKS\SampleDoorsWindowsKKS.csproj", "{AC3C844B-A962-4201-9A90-551FF7EBC6E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -44,7 +46,11 @@ Global
 		{36F6EE71-5A59-4764-8DB0-08CB1033FBDC}.Debug|x64.Build.0 = Debug|x64
 		{36F6EE71-5A59-4764-8DB0-08CB1033FBDC}.Release|x64.ActiveCfg = Release|x64
 		{40150A96-D034-45B1-9141-4A2EEA54DBF1}.Debug|x64.ActiveCfg = Debug|x64
+		{40150A96-D034-45B1-9141-4A2EEA54DBF1}.Debug|x64.Build.0 = Debug|x64
 		{40150A96-D034-45B1-9141-4A2EEA54DBF1}.Release|x64.ActiveCfg = Release|x64
+		{AC3C844B-A962-4201-9A90-551FF7EBC6E4}.Debug|x64.ActiveCfg = Debug|x64
+		{AC3C844B-A962-4201-9A90-551FF7EBC6E4}.Debug|x64.Build.0 = Debug|x64
+		{AC3C844B-A962-4201-9A90-551FF7EBC6E4}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
