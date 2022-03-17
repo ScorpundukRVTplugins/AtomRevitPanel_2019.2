@@ -20,7 +20,7 @@
                 Content="Collect doors" />
             <Button x:Name="undefined1" Content="undefined1" />
             <Button x:Name="undefined2" Content="undefined2" />
-            <ListView ItemsSource="{Binding DoorsList, Mode=TwoWay}" />
+            <DataGrid ItemsSource="{Binding DoorsList, Mode=TwoWay}" />
         </StackPanel>
     </Grid>
 </UserControl>
