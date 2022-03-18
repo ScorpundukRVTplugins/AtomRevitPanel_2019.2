@@ -23,6 +23,7 @@ using Autodesk.Revit.UI;
 
 using Autodesk.Revit.ApplicationServices;
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 
 namespace PanelView
 {
@@ -32,26 +33,55 @@ namespace PanelView
     public partial class MainPage : Page, IMainDockPanel, IDockablePaneProvider, IDockPanelWpfView
     {
         private Assembly addinControlAssembly = null;
-        private UserControl addinControl = null;        
-
+        private UserControl addinControl = null;
+        
         public MainPage()
         {
-            MainPageViewModel viewModel = new MainPageViewModel();
+            UpdateDockPage += ExecuteUpdate;
+            ViewModel = new MainPageViewModel();
             DataContext = viewModel;
             InitializeComponent();
-        }             
+        }
 
-        /* внутренний метод, одноимённый с методом интерфейса IRevitContextAccess
-         * он может быть каким угодно в зависимости от устройства
-         * конкретного класса панели.
-         * Его задача - обновлять вид, и ничего больше
-         */
-        public void UpdateView(Document doc)
+        private MainPageViewModel viewModel;
+        public MainPageViewModel ViewModel
         {
+            get { return viewModel; }
+            set
+            {
+                viewModel = value;
+            }
+        }
+
+        public object GetViewElement()
+        {
+            return this;
+        }
+
+        public void ExecuteUpdate()
+        {
+            DefineExternalExecute(UpdateView);
+            ExternalExecuteCaller.Raise();
+        }
+
+        public void UpdateView(UIApplication uiapplication)
+        {
+            UIDocument uidoc = uiapplication.ActiveUIDocument;
+            var app = uiapplication.Application;
+            Document doc = uidoc.Document;
+
             // get the current document name
             docName.Text = doc.PathName.ToString().Split('\\').Last();
             // get the active view name
             viewName.Text = doc.ActiveView.Name;
-        }       
-    }   
+        }
+
+        public void UnhookAllBinds()
+        {
+            UpdateDockPage -= ExecuteUpdate;
+            UpdateDockViewModel -= viewModel.ExecuteUpdate;
+            DataContext = null;
+            ViewModel = null;
+        }
+    }
 }

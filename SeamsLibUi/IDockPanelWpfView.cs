@@ -11,7 +11,9 @@ namespace SeamsLibUi
 {
     public interface IDockPanelWpfView
     {
+        void ExecuteUpdate();
         void UpdateView(UIApplication uiapplication);        
         object GetViewElement();
+        void UnhookAllBinds();
     }
 }

@@ -26,6 +26,7 @@ namespace AtomRevitPanel
     public partial class AtomRevitPanel : IExternalApplication
     {
         public static IMainDockPanel dockAccess;
+        public static bool firstOpenDone = false;
 
         public static Guid dockPanelGuid = new Guid("ABF5C50F-A592-43DB-9DC4-8017CCBE3E0D");
 

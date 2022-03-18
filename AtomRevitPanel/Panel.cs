@@ -17,6 +17,7 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.UI.Events;
 
 using static SeamsLibUi.ExecuteProvider;
+using Autodesk.Revit.ApplicationServices;
 
 namespace AtomRevitPanel
 {
@@ -62,9 +63,7 @@ namespace AtomRevitPanel
                 "hide16.png");
 
             DefineExternalExecute += DefineExecute;
-            
 
-            application.ControlledApplication.DocumentChanged += ControlledApplication_DocumentChanged;
             // определение статического ExternalEvent
             try
             {
@@ -78,13 +77,23 @@ namespace AtomRevitPanel
 
             if (!DockPanelRegister(application)) return Result.Failed;
 
+            application.ControlledApplication.DocumentOpened += ControlledApplication_DocumentOpened;
+
             return Result.Succeeded;
         }
 
-        private void ControlledApplication_DocumentChanged(object sender, DocumentChangedEventArgs e)
+        private void ControlledApplication_DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
-            dockAccess.ContextEventUpdate();
+            Application app = (Application)sender;
+
+            //TaskDialog.Show("Controlled application Document opened", count.ToString());
+            if (app.Documents.Size == 1)
+            {
+                DefineExternalExecute(ShowPanel);
+                ExternalExecuteCaller.Raise();
+            }
         }
+
 
         /* методя для передачи с делегатом DefineExternalExecute
          * будет вызваться вне контекста приложения
@@ -94,9 +103,9 @@ namespace AtomRevitPanel
          * через него в контекст Revit передаётся метод извне контекста
          */
         public void DefineExecute(Action<UIApplication> exec)
-        {            
+        {
             RunExternalExecute += exec;
-        }        
+        }
 
         /* переданный метод обнуляется 
          */

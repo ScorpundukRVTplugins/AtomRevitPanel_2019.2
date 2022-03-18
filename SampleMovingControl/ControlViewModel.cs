@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Autodesk.Revit.UI;
+
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 using MVVM;
 using System.Collections.ObjectModel;
 
@@ -12,6 +15,23 @@ namespace SampleMovingControl
 {
     public class ControlViewModel : ViewModelBase
     {
+        public ControlViewModel() : base()
+        {
+            UpdateAddinViewModel += ExecuteUpdate;
+        }
+
+        public void ExecuteUpdate()
+        {
+            DefineExternalExecute(UpdateViewModel);
+            ExternalExecuteCaller.Raise();
+        }
+
+        public void UpdateViewModel(UIApplication uiapp)
+        {
+
+        }
+
+
         private ObservableCollection<ElementPresenter> elementsToMove;
         public ObservableCollection<ElementPresenter> ElementsToMove
         {

@@ -16,7 +16,9 @@ using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
+
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 
 namespace SampleMovingControl
 {
@@ -27,8 +29,9 @@ namespace SampleMovingControl
     {
         public MovingControl()
         {
+            UpdateAddinControl += ExecuteUpdate;
             ViewModel = new ControlViewModel();
-            DataContext = ViewModel;
+            DataContext = viewModel;
             InitializeComponent();
         }
 
@@ -44,11 +47,25 @@ namespace SampleMovingControl
             return this as object;
         }
 
+        public void ExecuteUpdate()
+        {
+            DefineExternalExecute(UpdateView);
+            ExternalExecuteCaller.Raise();
+        }
+
         public void UpdateView(UIApplication uiapplication)
         {
             UIDocument uidoc = uiapplication.ActiveUIDocument;
             var app = uiapplication.Application;
             Document doc = uidoc.Document;
+        }
+
+        public void UnhookAllBinds()
+        {
+            UpdateAddinControl -= ExecuteUpdate;
+            UpdateAddinViewModel -= ViewModel.ExecuteUpdate;
+            DataContext = null;
+            ViewModel = null;
         }
     }
 }

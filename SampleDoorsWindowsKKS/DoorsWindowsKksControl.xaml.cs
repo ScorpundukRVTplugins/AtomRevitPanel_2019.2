@@ -18,6 +18,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
 
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 using MVVM;
 
 namespace SampleDoorsWindowsKKS
@@ -29,6 +30,7 @@ namespace SampleDoorsWindowsKKS
     {
         public DoorsWindowsKksControl()
         {
+            UpdateAddinControl += ExecuteUpdate;
             ViewModel = new ControlViewModel();
             DataContext = ViewModel;
             InitializeComponent();
@@ -41,9 +43,10 @@ namespace SampleDoorsWindowsKKS
             set { viewModel = value; }
         }
 
-        public object GetViewElement()
+        public void ExecuteUpdate()
         {
-            return this;
+            DefineExternalExecute(UpdateView);
+            ExternalExecuteCaller.Raise();
         }
 
         public void UpdateView(UIApplication uiapplication)
@@ -52,5 +55,19 @@ namespace SampleDoorsWindowsKKS
             var app = uiapplication.Application;
             Document doc = uidoc.Document;
         }
+
+        public object GetViewElement()
+        {
+            return this;
+        }
+
+        public void UnhookAllBinds()
+        {
+            UpdateAddinControl -= ExecuteUpdate;
+            UpdateAddinViewModel -= ViewModel.ExecuteUpdate;
+            DataContext = null;
+            ViewModel = null;
+        }
+
     }
 }

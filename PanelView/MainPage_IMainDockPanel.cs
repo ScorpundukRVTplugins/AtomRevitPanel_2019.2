@@ -40,20 +40,28 @@ namespace PanelView
             return this as IDockPanelWpfView;
         }
 
-        public void ContextEventUpdate()
-        {
-            DefineExternalExecute(UpdateView);
-            ExternalExecuteCaller.Raise();
-        }
+        //public void ContextEventUpdate()
+        //{
+        //    DefineExternalExecute(UpdateView);
+        //    ExternalExecuteCaller.Raise();
+        //}
 
-        public void UpdateCurrentControl(UIApplication uiapplication)
-        {
-            if (addinControl != null)
-                (addinControl as IDockPanelWpfView).UpdateView(uiapplication);
-        }
+        //public void UpdateCurrentControl(UIApplication uiapplication)
+        //{
+        //    if (addinControl != null)
+        //        (addinControl as IDockPanelWpfView).UpdateView(uiapplication);
+        //}
 
         public void RemoveAddinControl()
         {
+            try
+            {
+                (addinControl as IDockPanelWpfView).UnhookAllBinds();
+            }
+            catch(Exception exc)
+            {
+                TaskDialog.Show("Type cast error", exc.Message);
+            }
             panelGrid.Children.Remove(addinControl);
             addinControl = null;
             addinControlAssembly = null;
@@ -94,13 +102,13 @@ namespace PanelView
                 IDockPanelWpfView controlView
                     = Activator.CreateInstance(typeOfcontrol) as IDockPanelWpfView;
 
-                DefineExternalExecute( (UIApplication uiapp) => controlView.UpdateView(uiapp));
-                ExternalExecuteCaller.Raise();
-
                 addinControl = controlView.GetViewElement() as UserControl;
                 panelGrid.Children.Add(addinControl);
                 
                 System.Windows.Controls.Grid.SetRow(addinControl, 2);
+
+                InvokeAddinControlUpdate();
+                InvokeAddinViewModelUpdate();
             }
         }
     }

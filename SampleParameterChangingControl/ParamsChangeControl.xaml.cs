@@ -29,9 +29,17 @@ namespace SampleParameterChangingControl
     {
         public ParamsChangeControl()
         {
-            ControlViewModel viewModel = new ControlViewModel();
+            UpdateAddinControl += ExecuteUpdate;
+            ControlViewModel ViewModel = new ControlViewModel();
             DataContext = viewModel;
             InitializeComponent();
+        }
+
+        private ControlViewModel viewModel;
+        public ControlViewModel ViewModel
+        {
+            get { return viewModel; }
+            set { viewModel = value; }
         }
 
         public object GetViewElement()
@@ -39,11 +47,25 @@ namespace SampleParameterChangingControl
             return this as object;
         }
 
+        public void ExecuteUpdate()
+        {
+            DefineExternalExecute(UpdateView);
+            ExternalExecuteCaller.Raise();
+        }
+
         public void UpdateView(UIApplication uiapplication)
         {
             UIDocument uidoc = uiapplication.ActiveUIDocument;
             var app = uiapplication.Application;
             Document doc = uidoc.Document;
+        }
+
+        public void UnhookAllBinds()
+        {
+            UpdateAddinControl -= ExecuteUpdate;
+            UpdateAddinViewModel -= ViewModel.ExecuteUpdate;
+            DataContext = null;
+            ViewModel = null;
         }
     }
 }

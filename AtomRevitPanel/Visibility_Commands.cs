@@ -19,6 +19,7 @@ using Autodesk.Revit.UI.Events;
 
 using PanelView;
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 
 namespace AtomRevitPanel
 {
@@ -29,6 +30,18 @@ namespace AtomRevitPanel
         {
             DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
             DockablePane dockablePane = commandData.Application.GetDockablePane(id);
+
+            UIApplication uiapp = commandData.Application;
+
+            uiapp.Application.DocumentOpened -=
+                AtomRevitPanel.Application_DocumentOpened;
+
+            // subscribe view activated event
+            uiapp.ViewActivated -=
+                AtomRevitPanel.Application_ViewActivated;
+
+            //AtomRevitPanel.firstOpenDone = false;
+
             dockablePane.Hide();
 
             return Result.Succeeded;
@@ -38,58 +51,15 @@ namespace AtomRevitPanel
     [Transaction(TransactionMode.Manual)]
     public class ShowAtomPanel : IExternalCommand
     {
-        private ExternalCommandData commandData = null;
         public Page dockPanelView = (AtomRevitPanel.dockAccess as IDockPanelWpfView).GetViewElement() as Page;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            this.commandData = commandData;
+            UIApplication uiapp = commandData.Application;
 
-            try
-            {
-                // dockable window id
-                DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
-                DockablePane dockableWindow = commandData.Application.GetDockablePane(id);
-                (AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
+            AtomRevitPanel.ShowPanel(uiapp);
 
-                dockableWindow.Show();
-            }
-            catch (Exception ex)
-            {
-                // show error info dialog
-                TaskDialog.Show("DockablePane showing error", ex.Message);
-            }
-
-            commandData.Application.Application.DocumentOpened +=
-                Application_DocumentOpened;
-
-            // subscribe view activated event
-            commandData.Application.ViewActivated +=
-                Application_ViewActivated;
-
-            // return result
             return Result.Succeeded;
-        }
-
-        /* view activated event
-         * срабатывает когда открывается или переключается новый вид
-         */
-        public void Application_ViewActivated(object sender, ViewActivatedEventArgs e)
-        {
-            // provide ExternalCommandData object to dockable page
-            //dockPanelView.InitiateRevitAccess(commandData, elements);
-            (AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
-
-        }
-
-        /* document opened event
-         * срабатывает когда открывается новый документ - в этом случае также срабатывает 
-         * и ViewActivated
-         */
-        private void Application_DocumentOpened(object sender, DocumentOpenedEventArgs e)
-        {
-            // provide ExternalCommandData object to dockable page
-            (AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
         }
     }
 }

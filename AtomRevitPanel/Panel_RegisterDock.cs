@@ -19,6 +19,7 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.UI.Events;
 
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 
 
 namespace AtomRevitPanel
@@ -92,6 +93,61 @@ namespace AtomRevitPanel
                 }
             }
             return null;
+        }
+
+        public static void ShowPanel(UIApplication uiapp)
+        {
+            try
+            {
+                // dockable window id
+                DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
+                DockablePane dockableWindow = uiapp.GetDockablePane(id);
+                (AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(uiapp);
+
+                dockableWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                // show error info dialog
+                TaskDialog.Show("DockablePane showing error", ex.Message);
+            }
+
+            uiapp.Application.DocumentOpened +=
+                Application_DocumentOpened;
+
+            // subscribe view activated event
+            uiapp.ViewActivated +=
+                Application_ViewActivated;
+        }
+
+        /* view activated event
+         * срабатывает когда открывается или переключается новый вид
+         */
+        public static void Application_ViewActivated(object sender, ViewActivatedEventArgs e)
+        {
+            // provide ExternalCommandData object to dockable page
+            //dockPanelView.InitiateRevitAccess(commandData, elements);
+            //(AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
+            InvokeDockPageUpdate();
+            InvokeDockViewModelUpdate();
+        }
+
+        /* document opened event
+         * срабатывает когда открывается новый документ - в этом случае также срабатывает 
+         * и ViewActivated
+         */
+        public static void Application_DocumentOpened(object sender, DocumentOpenedEventArgs e)
+        {
+            // provide ExternalCommandData object to dockable page
+            //(AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
+            //if (AtomRevitPanel.firstOpenDone == false)
+            //{
+            //    InvokeDockPageUpdate();
+            //    InvokeDockViewModelUpdate();
+            //    AtomRevitPanel.firstOpenDone = true;
+            //}
+            InvokeDockPageUpdate();
+            InvokeDockViewModelUpdate();
         }
     }   
 }

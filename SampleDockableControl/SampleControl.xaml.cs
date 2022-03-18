@@ -34,6 +34,7 @@ namespace SampleDockableControl
     {
         public SampleControl()
         {
+            UpdateAddinControl += ExecuteUpdate;
             ViewModel = new ControlViewModel();
             DataContext = ViewModel;
             InitializeComponent();
@@ -51,6 +52,12 @@ namespace SampleDockableControl
             return this as object;
         }
 
+        public void ExecuteUpdate()
+        {
+            DefineExternalExecute(UpdateView);
+            ExternalExecuteCaller.Raise();
+        }
+
         public void UpdateView(UIApplication uiapplication)
         {
             UIDocument uidoc = uiapplication.ActiveUIDocument;
@@ -61,6 +68,14 @@ namespace SampleDockableControl
         public UserControl GetControl()
         {
             return this;
+        }
+
+        public void UnhookAllBinds()
+        {
+            UpdateAddinControl -= ExecuteUpdate;
+            UpdateAddinViewModel -= ViewModel.ExecuteUpdate;
+            DataContext = null;
+            ViewModel = null;
         }
 
         private void getDocName_Click(object sender, RoutedEventArgs e)

@@ -4,20 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Autodesk.Revit.UI;
-
 using SeamsLibUi;
 using static SeamsLibUi.ExecuteProvider;
 
 using MVVM;
+using Autodesk.Revit.UI;
 
-namespace SampleDockableControl
+namespace PanelView
 {
-    public class ControlViewModel : ViewModelBase
+    public class MainPageViewModel : ViewModelBase
     {
-        public ControlViewModel() : base()
+        public MainPageViewModel() : base()
         {
-            UpdateAddinViewModel += ExecuteUpdate;
+            UpdateDockViewModel += ExecuteUpdate;
         }
 
         public void ExecuteUpdate()
@@ -30,6 +29,6 @@ namespace SampleDockableControl
         {
 
         }
-    
+        
     }
 }
