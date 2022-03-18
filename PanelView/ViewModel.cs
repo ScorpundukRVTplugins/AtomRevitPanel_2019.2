@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 using SeamsLibUi;
 using MVVM;
+using Autodesk.Revit.UI;
 
-namespace SampleDockableControl
+namespace PanelView
 {
-    public class ControlViewModel : ViewModelBase
+    public class MainPageViewModel : ViewModelBase
     {
+        
     }
 }

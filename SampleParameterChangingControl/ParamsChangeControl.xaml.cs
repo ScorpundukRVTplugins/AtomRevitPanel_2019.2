@@ -16,31 +16,23 @@ using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
+
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 
 namespace SampleParameterChangingControl
 {
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class ParamsChangeControl : UserControl, IRevitContextAccess
+    public partial class ParamsChangeControl : UserControl, IDockPanelWpfView
     {
         public ParamsChangeControl()
         {
-            ViewModel = new ControlViewModel();
+            ControlViewModel viewModel = new ControlViewModel();
             DataContext = viewModel;
             InitializeComponent();
         }
-
-        private ControlViewModel viewModel;
-        public IPanelControlViewModel ViewModel
-        {
-            get { return null; }
-            set { viewModel = (ControlViewModel)value; }
-        }
-
-        public Action<Action<UIApplication>> DefineExternalExecute { get; set; }
-        public ExternalEvent ExternalExecuteCaller { get; set; }
 
         public object GetViewElement()
         {

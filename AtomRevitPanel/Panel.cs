@@ -61,11 +61,11 @@ namespace AtomRevitPanel
                 "hide32.png",
                 "hide16.png");
 
-            StaticDefineExecute += DefineExecute;
-
             DefineExternalExecute += DefineExecute;
+            
+
             application.ControlledApplication.DocumentChanged += ControlledApplication_DocumentChanged;
-            // определение ExternalEvent
+            // определение статического ExternalEvent
             try
             {
                 ExternalExecuteCaller = ExternalEvent.Create(new ExternalEventProvider());
@@ -74,16 +74,6 @@ namespace AtomRevitPanel
             catch(Exception exc)
             {
                 TaskDialog.Show("External Event definition failed", exc.Message);
-            }
-
-            // определение статического ExternalEvent
-            try
-            {
-                StaticExecuteCaller = ExternalEvent.Create(new ExternalEventProvider());
-            }
-            catch(Exception exc)
-            {
-                TaskDialog.Show("Static External Event definition failed", exc.Message);
             }
 
             if (!DockPanelRegister(application)) return Result.Failed;

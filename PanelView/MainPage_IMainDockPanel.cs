@@ -23,6 +23,7 @@ using Autodesk.Revit.UI;
 
 using Autodesk.Revit.ApplicationServices;
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 
 namespace PanelView
 {
@@ -34,9 +35,9 @@ namespace PanelView
             return this as IDockablePaneProvider;
         }
 
-        public IRevitContextAccess GetRevitAccess()
+        public IDockPanelWpfView GetRevitAccess()
         {
-            return this as IRevitContextAccess;
+            return this as IDockPanelWpfView;
         }
 
         public void ContextEventUpdate()
@@ -48,7 +49,7 @@ namespace PanelView
         public void UpdateCurrentControl(UIApplication uiapplication)
         {
             if (addinControl != null)
-                (addinControl as IRevitContextAccess).UpdateView(uiapplication);
+                (addinControl as IDockPanelWpfView).UpdateView(uiapplication);
         }
 
         public void RemoveAddinControl()
@@ -60,7 +61,7 @@ namespace PanelView
 
         public void AddAddinControl()
         {
-            //https://translated.turbopages.org/proxy_u/en-ru.ru.4faa0809-622b2b60-cf3d9858-74722d776562/https/stackoverflow.com/questions/123391/how-to-unload-an-assembly-from-the%20-primary-appdomain
+            //https://stackoverflow.com/questions/123391/how-to-unload-an-assembly-from-the%20-primary-appdomain
 
             string assemblyPath = "";
             try
@@ -68,7 +69,6 @@ namespace PanelView
                 OpenFileDialog fileDialog = new OpenFileDialog();
                 if (fileDialog.ShowDialog() == true)
                 {
-                    //assemblyPath = fileDialog.FileName;
                     assemblyPath = fileDialog.FileName;
                 }
             }
@@ -78,17 +78,8 @@ namespace PanelView
             }
 
             try
-            {                
-                //addinControlAssembly = Assembly.LoadFrom(assemblyPath);
-                addinControlAssembly = Assembly.Load(File.ReadAllBytes(assemblyPath));
-                //StringBuilder sb = new StringBuilder();
-                //sb.Append($"{addinControlAssembly.GetName()}\n");
-                //foreach (Type type in addinControlAssembly.DefinedTypes)
-                //{
-                //    sb.Append($"{type.Namespace}...{type.Name}\n");
-                //}
-                //MessageBox.Show(sb.ToString());
-                //TaskDialog.Show("Assembly", sb.ToString());
+            {
+                addinControlAssembly = Assembly.Load(File.ReadAllBytes(assemblyPath));                
             }
             catch (Exception e)
             {
@@ -96,30 +87,15 @@ namespace PanelView
             }
 
             Type typeOfcontrol = addinControlAssembly.DefinedTypes
-                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IRevitContextAccess))).First();
-
-            Type typeOfViewModel = addinControlAssembly.DefinedTypes
-                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IPanelControlViewModel))).First();
+                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IDockPanelWpfView))).First();
 
             if (typeOfcontrol != null)
             {
-                //TaskDialog.Show("Type if found", $"{typeOfcontrol.Name}");
-                IRevitContextAccess controlView
-                    = Activator.CreateInstance(typeOfcontrol) as IRevitContextAccess;
-
-                IPanelControlViewModel controlViewModel
-                    = Activator.CreateInstance(typeOfViewModel) as IPanelControlViewModel;
+                IDockPanelWpfView controlView
+                    = Activator.CreateInstance(typeOfcontrol) as IDockPanelWpfView;
 
                 DefineExternalExecute( (UIApplication uiapp) => controlView.UpdateView(uiapp));
                 ExternalExecuteCaller.Raise();
-
-                controlView.DefineExternalExecute = DefineExternalExecute;
-                controlView.ExternalExecuteCaller = ExternalExecuteCaller;
-                controlViewModel.DefineExternalExecute = DefineExternalExecute;
-                controlViewModel.ExternalExecuteCaller = ExternalExecuteCaller;
-
-                controlView.ViewModel = controlViewModel;
-                controlView.SetDataContext();
 
                 addinControl = controlView.GetViewElement() as UserControl;
                 panelGrid.Children.Add(addinControl);

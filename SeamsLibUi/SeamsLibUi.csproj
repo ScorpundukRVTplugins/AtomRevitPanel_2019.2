@@ -53,8 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExecuteProvider.cs" />
-    <Compile Include="IPanelControlViewModel.cs" />
-    <Compile Include="IRevitContextAccess.cs" />
+    <Compile Include="IDockPanelWpfView.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="IMainDockPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

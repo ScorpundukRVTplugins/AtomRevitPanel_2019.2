@@ -29,9 +29,7 @@ namespace AtomRevitPanel
         {
             try
             {
-                dockAccess = FindPanelViewAssembly() as IMainDockPanel;
-                (dockAccess as IRevitContextAccess).ExternalExecuteCaller  = ExternalExecuteCaller;
-                (dockAccess as IRevitContextAccess).DefineExternalExecute = DefineExternalExecute;
+                dockAccess = FindPanelViewAssembly() as IMainDockPanel;                
             }
             catch(Exception exc)
             {

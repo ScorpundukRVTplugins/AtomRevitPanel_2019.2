@@ -44,17 +44,6 @@ namespace PanelView
             return this;
         }
 
-        public Action<Action<UIApplication>> DefineExternalExecute
-        {
-            get;
-            set;
-        }
-        public ExternalEvent ExternalExecuteCaller
-        {
-            get;
-            set;
-        }
-
         public Func<UIApplication> UiContextReturn
         {
             get;

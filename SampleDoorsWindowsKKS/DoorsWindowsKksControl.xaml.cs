@@ -25,17 +25,21 @@ namespace SampleDoorsWindowsKKS
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class DoorsWindowsKksControl : UserControl, IRevitContextAccess
+    public partial class DoorsWindowsKksControl : UserControl, IDockPanelWpfView
     {
         public DoorsWindowsKksControl()
         {
+            ViewModel = new ControlViewModel();
+            DataContext = ViewModel;
             InitializeComponent();
         }
 
-        public Action<Action<UIApplication>> DefineExternalExecute { get; set; }
-        public ExternalEvent ExternalExecuteCaller { get; set; }
-        
-        public IPanelControlViewModel ViewModel { get; set; }
+        private ControlViewModel viewModel;
+        public ControlViewModel ViewModel
+        {
+            get { return viewModel; }
+            set { viewModel = value; }
+        }
 
         public object GetViewElement()
         {
@@ -48,11 +52,5 @@ namespace SampleDoorsWindowsKKS
             var app = uiapplication.Application;
             Document doc = uidoc.Document;
         }
-
-        public void SetDataContext()
-        {
-            DataContext = ViewModel as ControlViewModel;
-        }
-        
     }
 }

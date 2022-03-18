@@ -70,7 +70,7 @@
     <Compile Include="MainPage_IDockablePaneProvider.cs" />
     <Compile Include="MainPage_IMainDockPanel.cs" />
     <Compile Include="MainPage_IRevitContextAccess.cs" />
-    <Compile Include="MainPage_ViewModel.cs" />
+    <Compile Include="ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

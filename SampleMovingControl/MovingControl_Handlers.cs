@@ -20,7 +20,7 @@ using SeamsLibUi;
 
 namespace SampleMovingControl
 {
-    public partial class MovingControl : UserControl, IRevitContextAccess
+    public partial class MovingControl : UserControl, IDockPanelWpfView
     {
 
     }

@@ -9,13 +9,9 @@ using Autodesk.Revit.UI;
 
 namespace SeamsLibUi
 {
-    public interface IRevitContextAccess
+    public interface IDockPanelWpfView
     {
         void UpdateView(UIApplication uiapplication);        
         object GetViewElement();
-        Action<Action<UIApplication>> DefineExternalExecute { get; set; }        
-        ExternalEvent ExternalExecuteCaller { get; set; }
-        IPanelControlViewModel ViewModel { get; set; }
-        void SetDataContext();
-    }    
+    }
 }

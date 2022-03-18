@@ -29,27 +29,15 @@ namespace PanelView
     /// <summary>
     /// Логика взаимодействия для MainPage.xaml
     /// </summary>    
-    public partial class MainPage : Page, IMainDockPanel, IDockablePaneProvider, IRevitContextAccess
+    public partial class MainPage : Page, IMainDockPanel, IDockablePaneProvider, IDockPanelWpfView
     {
         private Assembly addinControlAssembly = null;
-        private UserControl addinControl = null;
-
-        //это пока что на вырост
-        //private MainPageViewModel viewModel;
-        //public IPanelControlViewModel ViewModel
-        //{
-        //    get { return null; }
-        //    set { viewModel = (MainPageViewModel)value; }
-        //}
-        public IPanelControlViewModel ViewModel { get; set; }
-
-        public void SetDataContext()
-        {
-            DataContext = ViewModel;
-        }
+        private UserControl addinControl = null;        
 
         public MainPage()
-        {            
+        {
+            MainPageViewModel viewModel = new MainPageViewModel();
+            DataContext = viewModel;
             InitializeComponent();
         }             
 

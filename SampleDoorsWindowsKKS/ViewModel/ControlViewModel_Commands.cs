@@ -20,7 +20,7 @@ using static SeamsLibUi.ExecuteProvider;
 
 namespace SampleDoorsWindowsKKS
 {
-    public partial class ControlViewModel : ViewModelBase, IPanelControlViewModel
+    public partial class ControlViewModel : ViewModelBase
     {
         RelayCommand collectDoorsCmd;
         public ICommand CollectDoorsCmd
@@ -30,21 +30,18 @@ namespace SampleDoorsWindowsKKS
                 if (collectDoorsCmd == null)
                 {
                     collectDoorsCmd =
-                        new RelayCommand(DeleteVSSetsExecute, DeleteVSSetsCanExecute);
+                        new RelayCommand(CollectDoorsExecute, CollectDoorsCanExecute);
                 }
                 return collectDoorsCmd;
             }
         }
 
-        public void DeleteVSSetsExecute(object parameter)
+        public void CollectDoorsExecute(object parameter)
         {
-            //DefineExternalExecute(CollectDoors);
-            //ExternalExecuteCaller.Raise();
-
             try
             {
-                StaticDefineExecute(CollectDoors);
-                StaticExecuteCaller.Raise();
+                DefineExternalExecute(CollectDoors);
+                ExternalExecuteCaller.Raise();
             }
             catch (Exception exc)
             {
@@ -53,7 +50,7 @@ namespace SampleDoorsWindowsKKS
 
         }
 
-        public bool DeleteVSSetsCanExecute(object parameter)
+        public bool CollectDoorsCanExecute(object parameter)
         {
             return true;
         }

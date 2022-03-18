@@ -22,7 +22,7 @@ using MVVM;
 
 namespace SampleDoorsWindowsKKS
 {
-    public partial class DoorsWindowsKksControl : UserControl, IRevitContextAccess
+    public partial class DoorsWindowsKksControl : UserControl, IDockPanelWpfView
     {
 
     }

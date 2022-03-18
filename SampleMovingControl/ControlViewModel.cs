@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace SampleMovingControl
 {
-    public class ControlViewModel : ViewModelBase, IPanelControlViewModel
+    public class ControlViewModel : ViewModelBase
     {
         private ObservableCollection<ElementPresenter> elementsToMove;
         public ObservableCollection<ElementPresenter> ElementsToMove

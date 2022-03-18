@@ -39,8 +39,7 @@ namespace AtomRevitPanel
     public class ShowAtomPanel : IExternalCommand
     {
         private ExternalCommandData commandData = null;
-        private ElementSet elements = null;
-        public Page dockPanelView = (AtomRevitPanel.dockAccess as IRevitContextAccess).GetViewElement() as Page;
+        public Page dockPanelView = (AtomRevitPanel.dockAccess as IDockPanelWpfView).GetViewElement() as Page;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -51,7 +50,7 @@ namespace AtomRevitPanel
                 // dockable window id
                 DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
                 DockablePane dockableWindow = commandData.Application.GetDockablePane(id);
-                (AtomRevitPanel.dockAccess as IRevitContextAccess).UpdateView(commandData.Application);
+                (AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
 
                 dockableWindow.Show();
             }
@@ -79,7 +78,7 @@ namespace AtomRevitPanel
         {
             // provide ExternalCommandData object to dockable page
             //dockPanelView.InitiateRevitAccess(commandData, elements);
-            (AtomRevitPanel.dockAccess as IRevitContextAccess).UpdateView(commandData.Application);
+            (AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
 
         }
 
@@ -90,7 +89,7 @@ namespace AtomRevitPanel
         private void Application_DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
             // provide ExternalCommandData object to dockable page
-            (AtomRevitPanel.dockAccess as IRevitContextAccess).UpdateView(commandData.Application);
+            (AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
         }
     }
 }

@@ -23,6 +23,7 @@ using Autodesk.Revit.UI;
 
 using Autodesk.Revit.ApplicationServices;
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 
 namespace PanelView
 {

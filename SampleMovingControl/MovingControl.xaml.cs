@@ -23,24 +23,21 @@ namespace SampleMovingControl
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class MovingControl : UserControl, IRevitContextAccess
+    public partial class MovingControl : UserControl, IDockPanelWpfView
     {
         public MovingControl()
         {
             ViewModel = new ControlViewModel();
-            DataContext = viewModel;
+            DataContext = ViewModel;
             InitializeComponent();
         }
 
         private ControlViewModel viewModel;
-        public IPanelControlViewModel ViewModel
+        public ControlViewModel ViewModel
         {
-            get { return viewModel as IPanelControlViewModel; }
-            set { viewModel = (ControlViewModel)value; }
+            get { return viewModel; }
+            set { viewModel = value; }
         }
-
-        public Action<Action<UIApplication>> DefineExternalExecute { get; set; }
-        public ExternalEvent ExternalExecuteCaller { get; set; }
 
         public object GetViewElement()
         {

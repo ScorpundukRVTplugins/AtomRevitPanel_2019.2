@@ -29,21 +29,6 @@ namespace AtomRevitPanel
 
         public static Guid dockPanelGuid = new Guid("ABF5C50F-A592-43DB-9DC4-8017CCBE3E0D");
 
-        /* передаётся во внешний контекст
-         * во внешнем контексте вызывается метод Raise
-         * запускающий метод Execute экземпляра типа ExternalEventProvider
-         *
-         * передача в главную страницу DockablePane
-         * а из неё в подключённый UserControl
-         */
-        public ExternalEvent ExternalExecuteCaller = null;
-
-        /* делегат для передачи извне контекста Revit
-         * методa для исполнения в экземпляре ExternalEventProvider
-         * упакованного в экземпляр ExternalEvent (ExEvent)
-         */
-        public Action<Action<UIApplication>> DefineExternalExecute;
-
        /* статическое свойство, содержащее метод
         * для исполнения, переданный извне контекста Revit
         * передаётся через делегат DefineOuterExecute

@@ -9,7 +9,7 @@ using MVVM;
 
 namespace SampleParameterChangingControl
 {
-    public class ControlViewModel : ViewModelBase, IPanelControlViewModel
+    public class ControlViewModel : ViewModelBase
     {
 
     }

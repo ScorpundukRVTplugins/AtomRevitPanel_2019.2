@@ -13,7 +13,7 @@ namespace SeamsLibUi
     public interface IMainDockPanel
     {
         IDockablePaneProvider GetDockProvider();
-        IRevitContextAccess GetRevitAccess();
+        IDockPanelWpfView GetRevitAccess();
         void ContextEventUpdate();
         void UpdateCurrentControl(UIApplication uiapplication);
         void RemoveAddinControl();

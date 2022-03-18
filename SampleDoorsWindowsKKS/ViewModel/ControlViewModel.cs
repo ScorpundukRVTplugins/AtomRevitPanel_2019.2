@@ -17,11 +17,8 @@ using System.Collections.ObjectModel;
 
 namespace SampleDoorsWindowsKKS
 {
-    public partial class ControlViewModel : ViewModelBase, IPanelControlViewModel
+    public partial class ControlViewModel : ViewModelBase
     {
-        public Action<Action<UIApplication>> DefineExternalExecute { get; set; }
-        public ExternalEvent ExternalExecuteCaller { get; set; }
-
         public void CollectDoors(UIApplication uiapp)
         {
             Application app = uiapp.Application;

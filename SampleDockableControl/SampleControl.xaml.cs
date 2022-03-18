@@ -21,36 +21,29 @@ using System.Threading;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
+
 using SeamsLibUi;
+using static SeamsLibUi.ExecuteProvider;
 
 namespace SampleDockableControl
 {
     /// <summary>
     /// Логика взаимодействия для UserControl2.xaml
     /// </summary>
-    public partial class SampleControl : UserControl , IRevitContextAccess
+    public partial class SampleControl : UserControl, IDockPanelWpfView
     {
-        private ControlViewModel viewModel;
-        public IPanelControlViewModel ViewModel
-        {
-            get { return viewModel; }
-            set { viewModel = (ControlViewModel)value; }
-        }
-
-        public Action<Action<UIApplication>> DefineExternalExecute
-        {
-            get;
-            set;
-        }
-        public ExternalEvent ExternalExecuteCaller
-        {
-            get;
-            set;
-        }
-
         public SampleControl()
         {
+            ViewModel = new ControlViewModel();
+            DataContext = ViewModel;
             InitializeComponent();
+        }
+
+        private ControlViewModel viewModel;
+        public ControlViewModel ViewModel
+        {
+            get { return viewModel; }
+            set { viewModel = value; }
         }
 
         public object GetViewElement()
