@@ -16,6 +16,8 @@ using MVVM;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
+using static SeamsLibUi.ExecuteProvider;
+
 namespace SampleDoorsWindowsKKS
 {
     public partial class ControlViewModel : ViewModelBase, IPanelControlViewModel
@@ -36,10 +38,19 @@ namespace SampleDoorsWindowsKKS
 
         public void DeleteVSSetsExecute(object parameter)
         {
-            bool full = doorsList == null;
-            DefineExternalExecute(CollectDoors);
-            ExternalExecuteCaller.Raise();
-            TaskDialog.Show("From Execute", doorsList.Count.ToString());
+            //DefineExternalExecute(CollectDoors);
+            //ExternalExecuteCaller.Raise();
+
+            try
+            {
+                StaticDefineExecute(CollectDoors);
+                StaticExecuteCaller.Raise();
+            }
+            catch (Exception exc)
+            {
+                TaskDialog.Show("Static members call failed", exc.Message);
+            }
+
         }
 
         public bool DeleteVSSetsCanExecute(object parameter)

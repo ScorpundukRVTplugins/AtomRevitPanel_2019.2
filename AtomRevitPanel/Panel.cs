@@ -16,6 +16,8 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.UI.Events;
 
+using static SeamsLibUi.ExecuteProvider;
+
 namespace AtomRevitPanel
 {
     public partial class AtomRevitPanel : IExternalApplication
@@ -59,6 +61,8 @@ namespace AtomRevitPanel
                 "hide32.png",
                 "hide16.png");
 
+            StaticDefineExecute += DefineExecute;
+
             DefineExternalExecute += DefineExecute;
             application.ControlledApplication.DocumentChanged += ControlledApplication_DocumentChanged;
             // определение ExternalEvent
@@ -69,7 +73,17 @@ namespace AtomRevitPanel
             }
             catch(Exception exc)
             {
-                TaskDialog.Show("External Event Creation error", exc.Message);
+                TaskDialog.Show("External Event definition failed", exc.Message);
+            }
+
+            // определение статического ExternalEvent
+            try
+            {
+                StaticExecuteCaller = ExternalEvent.Create(new ExternalEventProvider());
+            }
+            catch(Exception exc)
+            {
+                TaskDialog.Show("Static External Event definition failed", exc.Message);
             }
 
             if (!DockPanelRegister(application)) return Result.Failed;

@@ -29,15 +29,11 @@ namespace SampleDoorsWindowsKKS
             Document doc = uidoc.Document;
 
             List<Element> doors = new List<Element>();
-
-            TaskDialog.Show("It is me", "command from view model");
-
             try
             {
                 ElementCategoryFilter doorCategoryFilter = new ElementCategoryFilter(BuiltInCategory.OST_Doors);
                 FilteredElementCollector doorCollector = new FilteredElementCollector(doc);
-                doors = (List<Element>)(doorCollector.WherePasses(doorCategoryFilter).WhereElementIsElementType().ToElements());
-                TaskDialog.Show("Doors", doors.Count.ToString());
+                doors = (List<Element>)(doorCollector.WherePasses(doorCategoryFilter).WhereElementIsElementType().ToElements());                
             }
             catch (Exception exc)
             {

@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecuteProvider.cs" />
     <Compile Include="IPanelControlViewModel.cs" />
     <Compile Include="IRevitContextAccess.cs" />
     <Compile Include="Attributes.cs" />
