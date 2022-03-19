@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 using Autodesk.Revit.UI;
 
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 
 using MVVM;
 
 namespace SampleDockableControl
 {
-    public class ControlViewModel : ViewModelBase
+    public class ControlViewModel : ViewModelBase, IUpdateSubscriber
     {
         public ControlViewModel() : base()
         {
@@ -22,14 +22,19 @@ namespace SampleDockableControl
 
         public void ExecuteUpdate()
         {
-            DefineExternalExecute(UpdateViewModel);
+            DefineExternalExecute(UpdateState);
             ExternalExecuteCaller.Raise();
         }
 
-        public void UpdateViewModel(UIApplication uiapp)
+
+        public void UpdateState(UIApplication uiapp)
         {
 
         }
     
+        public void UnhookAllBinds()
+        {
+            UpdateAddinViewModel -= ExecuteUpdate;
+        }
     }
 }

@@ -8,14 +8,13 @@ using Autodesk.Revit.DB;
 
 using System.Windows.Controls;
 
-namespace SeamsLibUi
+namespace DockApplicationBase
 {
     public interface IMainDockPanel
     {
         IDockablePaneProvider GetDockProvider();
-        IDockPanelWpfView GetRevitAccess();
-        //void ContextEventUpdate();
-        //void UpdateCurrentControl(UIApplication uiapplication);
+        IDockPanelWpfView GetDockPage();
+        IDockPanelWpfView GetAddinControl();
         void RemoveAddinControl();
         void AddAddinControl();
     }

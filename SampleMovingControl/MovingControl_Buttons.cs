@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
-using SeamsLibUi;
+using DockApplicationBase;
 
 namespace SampleMovingControl
 {

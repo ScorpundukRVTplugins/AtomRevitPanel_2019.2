@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PanelView", "PanelView\Pane
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDockableControl", "SampleDockableControl\SampleDockableControl.csproj", "{54788301-C0EE-42D3-BA8D-73DDEDD8446F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeamsLibUi", "SeamsLibUi\SeamsLibUi.csproj", "{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockApplicationBase", "SeamsLibUi\DockApplicationBase.csproj", "{6DC2CA5C-53A7-45DF-B4D4-C2670CB86FF3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMovingControl", "SampleMovingControl\SampleMovingControl.csproj", "{D3CF63CE-B198-430D-B1E8-D7A81630B6C6}"
 EndProject

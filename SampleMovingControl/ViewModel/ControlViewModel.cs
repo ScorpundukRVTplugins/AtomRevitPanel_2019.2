@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using DockApplicationBase;
-using static DockApplicationBase.ExecuteProvider;
-
-using MVVM;
 using Autodesk.Revit.UI;
 
-namespace PanelView
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
+using MVVM;
+using System.Collections.ObjectModel;
+
+namespace SampleMovingControl
 {
-    public class MainPageViewModel : ViewModelBase, IUpdateSubscriber
+    public partial class ControlViewModel : ViewModelBase, IUpdateSubscriber
     {
-        public MainPageViewModel() : base()
+        public ControlViewModel() : base()
         {
-            UpdateDockViewModel += ExecuteUpdate;
+            UpdateAddinViewModel += ExecuteUpdate;
         }
 
         public void ExecuteUpdate()
@@ -25,14 +26,15 @@ namespace PanelView
             ExternalExecuteCaller.Raise();
         }
 
-        public void UpdateState(UIApplication uiapplication)
+
+        public void UpdateState(UIApplication uiapp)
         {
-            
+
         }
 
         public void UnhookAllBinds()
         {
-            UpdateDockViewModel -= ExecuteUpdate;
+            UpdateAddinViewModel -= ExecuteUpdate;
         }
     }
 }

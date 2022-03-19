@@ -22,8 +22,8 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 
 using Autodesk.Revit.ApplicationServices;
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 
 namespace PanelView
 {

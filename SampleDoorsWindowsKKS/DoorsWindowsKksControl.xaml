@@ -18,9 +18,10 @@
                 x:Name="showAllDoors"
                 Command="{Binding CollectDoorsCmd}"
                 Content="Collect doors" />
-            <Button x:Name="undefined1" Content="undefined1" />
+            <Button x:Name="undefined1" Content="Check Context" Command="{Binding CheckContextCmd}" />
             <Button x:Name="undefined2" Content="undefined2" />
-            <DataGrid ItemsSource="{Binding DoorsList, Mode=TwoWay}" />
+            <TextBlock x:Name="countOfDoors" Text="{Binding CountOfDoors, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <DataGrid ItemsSource="{Binding DoorsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
     </Grid>
 </UserControl>

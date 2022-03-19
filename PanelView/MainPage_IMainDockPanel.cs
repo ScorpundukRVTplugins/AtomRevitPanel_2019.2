@@ -22,8 +22,8 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 
 using Autodesk.Revit.ApplicationServices;
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 
 namespace PanelView
 {
@@ -35,28 +35,16 @@ namespace PanelView
             return this as IDockablePaneProvider;
         }
 
-        public IDockPanelWpfView GetRevitAccess()
+        public IDockPanelWpfView GetDockPage()
         {
             return this as IDockPanelWpfView;
         }
-
-        //public void ContextEventUpdate()
-        //{
-        //    DefineExternalExecute(UpdateView);
-        //    ExternalExecuteCaller.Raise();
-        //}
-
-        //public void UpdateCurrentControl(UIApplication uiapplication)
-        //{
-        //    if (addinControl != null)
-        //        (addinControl as IDockPanelWpfView).UpdateView(uiapplication);
-        //}
 
         public void RemoveAddinControl()
         {
             try
             {
-                (addinControl as IDockPanelWpfView).UnhookAllBinds();
+                (addinControl as IUpdateSubscriber).UnhookAllBinds();
             }
             catch(Exception exc)
             {

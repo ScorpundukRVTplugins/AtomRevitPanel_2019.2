@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 using Autodesk.Revit.UI;
 
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 using MVVM;
 
 namespace SampleParameterChangingControl

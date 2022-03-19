@@ -22,35 +22,32 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
 
 using Autodesk.Revit.ApplicationServices;
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 
 namespace PanelView
 {
     /// <summary>
     /// Логика взаимодействия для MainPage.xaml
     /// </summary>    
-    public partial class MainPage : Page, IMainDockPanel, IDockablePaneProvider, IDockPanelWpfView
+    public partial class MainPage : Page, IDockablePaneProvider, IMainDockPanel, IDockPanelWpfView, IUpdateSubscriber
     {
         private Assembly addinControlAssembly = null;
         private UserControl addinControl = null;
         
         public MainPage()
         {
+            InitializeComponent();
             UpdateDockPage += ExecuteUpdate;
             ViewModel = new MainPageViewModel();
             DataContext = viewModel;
-            InitializeComponent();
         }
 
         private MainPageViewModel viewModel;
         public MainPageViewModel ViewModel
         {
             get { return viewModel; }
-            set
-            {
-                viewModel = value;
-            }
+            set { viewModel = value; }
         }
 
         public object GetViewElement()
@@ -60,11 +57,11 @@ namespace PanelView
 
         public void ExecuteUpdate()
         {
-            DefineExternalExecute(UpdateView);
+            DefineExternalExecute(UpdateState);
             ExternalExecuteCaller.Raise();
         }
 
-        public void UpdateView(UIApplication uiapplication)
+        public void UpdateState(UIApplication uiapplication)
         {
             UIDocument uidoc = uiapplication.ActiveUIDocument;
             var app = uiapplication.Application;
@@ -79,9 +76,24 @@ namespace PanelView
         public void UnhookAllBinds()
         {
             UpdateDockPage -= ExecuteUpdate;
-            UpdateDockViewModel -= viewModel.ExecuteUpdate;
+            ViewModel.UnhookAllBinds();
             DataContext = null;
             ViewModel = null;
+        }
+
+        public IDockPanelWpfView GetAddinControl()
+        {
+            return addinControl as IDockPanelWpfView;
+        }
+
+        public IUpdateSubscriber GetViewUpdater()
+        {
+            return this as IUpdateSubscriber;
+        }
+
+        public IUpdateSubscriber GetViewModelUpdater()
+        {
+            return ViewModel as IUpdateSubscriber;
         }
     }
 }

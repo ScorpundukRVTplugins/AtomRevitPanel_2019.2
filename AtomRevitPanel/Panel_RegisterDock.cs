@@ -18,8 +18,8 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.UI.Events;
 
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 
 
 namespace AtomRevitPanel
@@ -102,7 +102,7 @@ namespace AtomRevitPanel
                 // dockable window id
                 DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
                 DockablePane dockableWindow = uiapp.GetDockablePane(id);
-                (AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(uiapp);
+                (AtomRevitPanel.dockAccess as IUpdateSubscriber).UpdateState(uiapp);
 
                 dockableWindow.Show();
             }
@@ -118,6 +118,9 @@ namespace AtomRevitPanel
             // subscribe view activated event
             uiapp.ViewActivated +=
                 Application_ViewActivated;
+
+            uiapp.Application.DocumentChanged +=
+                DocumentChangedHandler;
         }
 
         /* view activated event
@@ -128,8 +131,17 @@ namespace AtomRevitPanel
             // provide ExternalCommandData object to dockable page
             //dockPanelView.InitiateRevitAccess(commandData, elements);
             //(AtomRevitPanel.dockAccess as IDockPanelWpfView).UpdateView(commandData.Application);
-            InvokeDockPageUpdate();
-            InvokeDockViewModelUpdate();
+            dockAccess.GetDockPage().GetViewUpdater().ExecuteUpdate();
+            dockAccess.GetDockPage().GetViewModelUpdater().ExecuteUpdate();
+            if(dockAccess.GetAddinControl() != null)
+            {
+                dockAccess.GetAddinControl().GetViewUpdater().ExecuteUpdate();
+                dockAccess.GetAddinControl().GetViewModelUpdater().ExecuteUpdate();
+            }
+
+                
+            //InvokeDockPageUpdate();
+            //InvokeDockViewModelUpdate();
         }
 
         /* document opened event
@@ -146,8 +158,37 @@ namespace AtomRevitPanel
             //    InvokeDockViewModelUpdate();
             //    AtomRevitPanel.firstOpenDone = true;
             //}
-            InvokeDockPageUpdate();
-            InvokeDockViewModelUpdate();
+            dockAccess.GetDockPage().GetViewUpdater().ExecuteUpdate();
+            dockAccess.GetDockPage().GetViewModelUpdater().ExecuteUpdate();
+            if (dockAccess.GetAddinControl() != null)
+            {
+                dockAccess.GetAddinControl().GetViewUpdater().ExecuteUpdate();
+                dockAccess.GetAddinControl().GetViewModelUpdater().ExecuteUpdate();
+            }
+            //InvokeDockPageUpdate();
+            //InvokeDockViewModelUpdate();
+        }
+
+        public static void DocumentChangedHandler(object sender, DocumentChangedEventArgs e)
+        {
+            /* по неизвестной мне пока причине при вызове статических
+             * событий, на которые подписаны методы обновления ViewModel
+             * при том, что они отрабатывают - обновления интерфейса не происходит
+             * похоже, что метод подписчик отрабатывает вне контекста
+             * и ничего не изменяет в классе viewmodel
+             * 
+             * Если вызывается событие, на которое подписан метод, обновляющий 
+             * сами поля класса контрола (например, текст в TextBlock)
+             * - тогда всё работает
+             */
+            //InvokeAddinControlUpdate();
+            //InvokeAddinViewModelUpdate();
+            if (dockAccess.GetAddinControl() != null)
+            {
+                dockAccess.GetAddinControl().GetViewUpdater().ExecuteUpdate();
+                dockAccess.GetAddinControl().GetViewModelUpdater().ExecuteUpdate();
+            }
+            //dockAccess.GetAddinControl().GetViewUpdater().ExecuteUpdate();
         }
     }   
 }

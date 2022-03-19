@@ -18,8 +18,8 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.UI.Events;
 
 using PanelView;
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 
 namespace AtomRevitPanel
 {
@@ -40,6 +40,9 @@ namespace AtomRevitPanel
             uiapp.ViewActivated -=
                 AtomRevitPanel.Application_ViewActivated;
 
+            uiapp.Application.DocumentChanged -=
+                AtomRevitPanel.DocumentChangedHandler;
+
             //AtomRevitPanel.firstOpenDone = false;
 
             dockablePane.Hide();
@@ -57,7 +60,7 @@ namespace AtomRevitPanel
         {
             UIApplication uiapp = commandData.Application;
 
-            AtomRevitPanel.ShowPanel(uiapp);
+            AtomRevitPanel.ShowPanel(uiapp);            
 
             return Result.Succeeded;
         }

@@ -17,8 +17,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
 
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 
 namespace SampleParameterChangingControl
 {
@@ -49,11 +49,11 @@ namespace SampleParameterChangingControl
 
         public void ExecuteUpdate()
         {
-            DefineExternalExecute(UpdateView);
+            DefineExternalExecute(UpdateState);
             ExternalExecuteCaller.Raise();
         }
 
-        public void UpdateView(UIApplication uiapplication)
+        public void UpdateState(UIApplication uiapplication)
         {
             UIDocument uidoc = uiapplication.ActiveUIDocument;
             var app = uiapplication.Application;

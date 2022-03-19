@@ -7,13 +7,12 @@ using System.Windows.Controls;
 
 using Autodesk.Revit.UI;
 
-namespace SeamsLibUi
+namespace DockApplicationBase
 {
     public interface IDockPanelWpfView
     {
-        void ExecuteUpdate();
-        void UpdateView(UIApplication uiapplication);        
+        IUpdateSubscriber GetViewUpdater();
+        IUpdateSubscriber GetViewModelUpdater();
         object GetViewElement();
-        void UnhookAllBinds();
     }
 }

@@ -4,26 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeamsLibUi
+namespace DockApplicationBase
 {
     // Создаем атрибут
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class DockablePaneViewAttribute : System.Attribute
     {
-        public bool isMainPanelView = false;
+        public string addinName;
         public AddinDocTypeUsage addinUsage = AddinDocTypeUsage.Both;
         public DockablePaneViewAttribute() { }
-        public DockablePaneViewAttribute(bool isMainPanelView, AddinDocTypeUsage addinUsage)
+        public DockablePaneViewAttribute(string addinName, AddinDocTypeUsage addinUsage)
         {
-            this.isMainPanelView = isMainPanelView;
+            this.addinName = addinName;
             this.addinUsage = addinUsage;
         }
+    }
 
-        public enum AddinDocTypeUsage
-        {
-            RvtDoc = 2,
-            RvtFamily = 4,
-            Both = 8,
-        }
+    public enum AddinDocTypeUsage
+    {
+        RvtDoc = 2,
+        RvtFamily = 4,
+        Both = 8,
     }
 }

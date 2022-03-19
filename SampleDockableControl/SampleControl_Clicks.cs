@@ -32,45 +32,23 @@ namespace SampleDockableControl
     /// </summary>
     public partial class SampleControl : UserControl, IDockPanelWpfView, IUpdateSubscriber
     {
-        public SampleControl()
+        private void getDocName_Click(object sender, RoutedEventArgs e)
         {
-            UpdateAddinControl += ExecuteUpdate;
-            ViewModel = new ControlViewModel();
-            DataContext = ViewModel;
-            InitializeComponent();
-        }
-
-        private ControlViewModel viewModel;
-        public ControlViewModel ViewModel
-        {
-            get { return viewModel; }
-            set { viewModel = value; }
-        }
-
-        public object GetViewElement()
-        {
-            return this as object;
-        }
-
-        public void ExecuteUpdate()
-        {
-            DefineExternalExecute(UpdateState);
+            DefineExternalExecute.Invoke(GetDocName);
             ExternalExecuteCaller.Raise();
         }
 
-        public void UpdateState(UIApplication uiapplication)
+
+        private void selectElement_Click(object sender, RoutedEventArgs e)
         {
-            UIDocument uidoc = uiapplication.ActiveUIDocument;
-            var app = uiapplication.Application;
-            Document doc = uidoc.Document;
+            DefineExternalExecute.Invoke(ExecSelectionSample);
+            ExternalExecuteCaller.Raise();
         }
 
-        public void UnhookAllBinds()
+        private void changeDetailLevel_Click(object sender, RoutedEventArgs e)
         {
-            UpdateAddinControl -= ExecuteUpdate;
-            ViewModel.UnhookAllBinds();
-            DataContext = null;
-            ViewModel = null;
+            DefineExternalExecute.Invoke(ExecTransactionSample);
+            ExternalExecuteCaller.Raise();
         }
     }
 }

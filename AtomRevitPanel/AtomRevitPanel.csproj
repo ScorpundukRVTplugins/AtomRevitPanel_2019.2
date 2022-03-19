@@ -90,10 +90,9 @@
       <Project>{3d098e7d-c875-4a90-9c61-5f5d322db92c}</Project>
       <Name>PanelView</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SeamsLibUi\SeamsLibUi.csproj">
+    <ProjectReference Include="..\SeamsLibUi\DockApplicationBase.csproj">
       <Project>{6dc2ca5c-53a7-45df-b4d4-c2670cb86ff3}</Project>
-      <Name>SeamsLibUi</Name>
-      <Private>False</Private>
+      <Name>DockApplicationBase</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

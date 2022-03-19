@@ -19,7 +19,7 @@ using Autodesk.Revit.UI.Events;
 using System.Windows;
 using System.Windows.Controls;
 
-using SeamsLibUi;
+using DockApplicationBase;
 
 namespace AtomRevitPanel
 {

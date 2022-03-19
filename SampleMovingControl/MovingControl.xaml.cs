@@ -17,22 +17,22 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
 
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 
 namespace SampleMovingControl
 {
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class MovingControl : UserControl, IDockPanelWpfView
+    public partial class MovingControl : UserControl, IDockPanelWpfView, IUpdateSubscriber
     {
         public MovingControl()
         {
+            InitializeComponent();
             UpdateAddinControl += ExecuteUpdate;
             ViewModel = new ControlViewModel();
             DataContext = viewModel;
-            InitializeComponent();
         }
 
         private ControlViewModel viewModel;
@@ -49,11 +49,11 @@ namespace SampleMovingControl
 
         public void ExecuteUpdate()
         {
-            DefineExternalExecute(UpdateView);
+            DefineExternalExecute(UpdateState);
             ExternalExecuteCaller.Raise();
         }
 
-        public void UpdateView(UIApplication uiapplication)
+        public void UpdateState(UIApplication uiapplication)
         {
             UIDocument uidoc = uiapplication.ActiveUIDocument;
             var app = uiapplication.Application;
@@ -63,7 +63,7 @@ namespace SampleMovingControl
         public void UnhookAllBinds()
         {
             UpdateAddinControl -= ExecuteUpdate;
-            UpdateAddinViewModel -= ViewModel.ExecuteUpdate;
+            ViewModel.UnhookAllBinds();
             DataContext = null;
             ViewModel = null;
         }

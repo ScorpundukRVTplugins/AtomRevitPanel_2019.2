@@ -17,8 +17,8 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.ApplicationServices;
 
-using SeamsLibUi;
-using static SeamsLibUi.ExecuteProvider;
+using DockApplicationBase;
+using static DockApplicationBase.ExecuteProvider;
 using MVVM;
 
 namespace SampleDoorsWindowsKKS
@@ -26,14 +26,14 @@ namespace SampleDoorsWindowsKKS
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class DoorsWindowsKksControl : UserControl, IDockPanelWpfView
+    public partial class DoorsWindowsKksControl : UserControl, IDockPanelWpfView, IUpdateSubscriber
     {
         public DoorsWindowsKksControl()
         {
+            InitializeComponent();
             UpdateAddinControl += ExecuteUpdate;
             ViewModel = new ControlViewModel();
             DataContext = ViewModel;
-            InitializeComponent();
         }
 
         private ControlViewModel viewModel;
@@ -45,16 +45,17 @@ namespace SampleDoorsWindowsKKS
 
         public void ExecuteUpdate()
         {
-            DefineExternalExecute(UpdateView);
+            DefineExternalExecute(UpdateState);
             ExternalExecuteCaller.Raise();
         }
 
-        public void UpdateView(UIApplication uiapplication)
+        public void UpdateState(UIApplication uiapplication)
         {
             UIDocument uidoc = uiapplication.ActiveUIDocument;
             var app = uiapplication.Application;
             Document doc = uidoc.Document;
         }
+
 
         public object GetViewElement()
         {
@@ -64,10 +65,19 @@ namespace SampleDoorsWindowsKKS
         public void UnhookAllBinds()
         {
             UpdateAddinControl -= ExecuteUpdate;
-            UpdateAddinViewModel -= ViewModel.ExecuteUpdate;
+            ViewModel.UnhookAllBinds();
             DataContext = null;
             ViewModel = null;
         }
 
+        public IUpdateSubscriber GetViewModelUpdater()
+        {
+            return ViewModel as IUpdateSubscriber;
+        }
+
+        public IUpdateSubscriber GetViewUpdater()
+        {
+            return this as IUpdateSubscriber;
+        }
     }
 }
