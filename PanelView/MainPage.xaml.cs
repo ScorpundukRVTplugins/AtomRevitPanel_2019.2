@@ -30,7 +30,7 @@ namespace PanelView
     /// <summary>
     /// Логика взаимодействия для MainPage.xaml
     /// </summary>    
-    public partial class MainPage : Page, IDockablePaneProvider, IMainDockPanel, IDockPanelWpfView, IUpdateSubscriber
+    public partial class MainPage : Page, IDockablePaneProvider, IMainDockPanel, IDockPanelWpfView, IViewUpdater
     {
         private Assembly addinControlAssembly = null;
         private UserControl addinControl = null;
@@ -38,7 +38,6 @@ namespace PanelView
         public MainPage()
         {
             InitializeComponent();
-            UpdateDockPage += ExecuteUpdate;
             ViewModel = new MainPageViewModel();
             DataContext = viewModel;
         }
@@ -75,8 +74,6 @@ namespace PanelView
 
         public void UnhookAllBinds()
         {
-            UpdateDockPage -= ExecuteUpdate;
-            ViewModel.UnhookAllBinds();
             DataContext = null;
             ViewModel = null;
         }
@@ -86,14 +83,14 @@ namespace PanelView
             return addinControl as IDockPanelWpfView;
         }
 
-        public IUpdateSubscriber GetViewUpdater()
+        public IViewUpdater GetViewUpdater()
         {
-            return this as IUpdateSubscriber;
+            return this as IViewUpdater;
         }
 
-        public IUpdateSubscriber GetViewModelUpdater()
+        public IViewUpdater GetViewModelUpdater()
         {
-            return ViewModel as IUpdateSubscriber;
+            return ViewModel as IViewUpdater;
         }
     }
 }

@@ -26,12 +26,11 @@ namespace SampleDoorsWindowsKKS
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class DoorsWindowsKksControl : UserControl, IDockPanelWpfView, IUpdateSubscriber
+    public partial class DoorsWindowsKksControl : UserControl, IDockPanelWpfView, IViewUpdater
     {
         public DoorsWindowsKksControl()
         {
             InitializeComponent();
-            UpdateAddinControl += ExecuteUpdate;
             ViewModel = new ControlViewModel();
             DataContext = ViewModel;
         }
@@ -64,20 +63,19 @@ namespace SampleDoorsWindowsKKS
 
         public void UnhookAllBinds()
         {
-            UpdateAddinControl -= ExecuteUpdate;
             ViewModel.UnhookAllBinds();
             DataContext = null;
             ViewModel = null;
         }
 
-        public IUpdateSubscriber GetViewModelUpdater()
+        public IViewUpdater GetViewModelUpdater()
         {
-            return ViewModel as IUpdateSubscriber;
+            return ViewModel as IViewUpdater;
         }
 
-        public IUpdateSubscriber GetViewUpdater()
+        public IViewUpdater GetViewUpdater()
         {
-            return this as IUpdateSubscriber;
+            return this as IViewUpdater;
         }
     }
 }

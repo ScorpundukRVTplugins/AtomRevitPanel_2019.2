@@ -53,11 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExecuteProvider.cs" />
-    <Compile Include="ExecuteProvider_UpdateEvents.cs" />
     <Compile Include="IDockPanelWpfView.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="IMainDockPanel.cs" />
-    <Compile Include="IUpdateSubscriber.cs" />
+    <Compile Include="IViewUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

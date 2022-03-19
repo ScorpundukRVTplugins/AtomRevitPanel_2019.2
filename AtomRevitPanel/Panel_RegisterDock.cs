@@ -102,7 +102,7 @@ namespace AtomRevitPanel
                 // dockable window id
                 DockablePaneId id = new DockablePaneId(AtomRevitPanel.dockPanelGuid);
                 DockablePane dockableWindow = uiapp.GetDockablePane(id);
-                (AtomRevitPanel.dockAccess as IUpdateSubscriber).UpdateState(uiapp);
+                (AtomRevitPanel.dockAccess as IViewUpdater).UpdateState(uiapp);
 
                 dockableWindow.Show();
             }

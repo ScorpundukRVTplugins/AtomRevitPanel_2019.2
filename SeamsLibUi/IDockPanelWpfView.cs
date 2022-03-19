@@ -11,8 +11,8 @@ namespace DockApplicationBase
 {
     public interface IDockPanelWpfView
     {
-        IUpdateSubscriber GetViewUpdater();
-        IUpdateSubscriber GetViewModelUpdater();
+        IViewUpdater GetViewUpdater();
+        IViewUpdater GetViewModelUpdater();
         object GetViewElement();
     }
 }

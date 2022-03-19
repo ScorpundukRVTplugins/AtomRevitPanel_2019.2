@@ -18,12 +18,11 @@ using System.Collections.ObjectModel;
 
 namespace SampleDoorsWindowsKKS
 {
-    public partial class ControlViewModel : ViewModelBase, IUpdateSubscriber
+    public partial class ControlViewModel : ViewModelBase, IViewUpdater
     {
         public ControlViewModel() : base()
         {
-            UpdateAddinViewModel += ExecuteUpdate;
-            ExecuteUpdate();
+
         }
 
         public void ExecuteUpdate()
@@ -39,7 +38,7 @@ namespace SampleDoorsWindowsKKS
 
         public void UnhookAllBinds()
         {
-            UpdateAddinViewModel -= ExecuteUpdate;
+            
         }
     }
 }

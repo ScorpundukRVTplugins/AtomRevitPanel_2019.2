@@ -12,11 +12,11 @@ using Autodesk.Revit.UI;
 
 namespace PanelView
 {
-    public class MainPageViewModel : ViewModelBase, IUpdateSubscriber
+    public class MainPageViewModel : ViewModelBase, IViewUpdater
     {
         public MainPageViewModel() : base()
         {
-            UpdateDockViewModel += ExecuteUpdate;
+
         }
 
         public void ExecuteUpdate()
@@ -32,7 +32,7 @@ namespace PanelView
 
         public void UnhookAllBinds()
         {
-            UpdateDockViewModel -= ExecuteUpdate;
+
         }
     }
 }

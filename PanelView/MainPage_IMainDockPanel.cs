@@ -44,7 +44,7 @@ namespace PanelView
         {
             try
             {
-                (addinControl as IUpdateSubscriber).UnhookAllBinds();
+                (addinControl as IViewUpdater).UnhookAllBinds();
             }
             catch(Exception exc)
             {
@@ -95,8 +95,8 @@ namespace PanelView
                 
                 System.Windows.Controls.Grid.SetRow(addinControl, 2);
 
-                InvokeAddinControlUpdate();
-                InvokeAddinViewModelUpdate();
+                (addinControl as IViewUpdater).ExecuteUpdate();
+                (addinControl as IDockPanelWpfView).GetViewModelUpdater().ExecuteUpdate();
             }
         }
     }
