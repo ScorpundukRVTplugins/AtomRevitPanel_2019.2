@@ -54,13 +54,15 @@ namespace AtomRevitPanel
     [Transaction(TransactionMode.Manual)]
     public class ShowAtomPanel : IExternalCommand
     {
-        public Page dockPanelView = (AtomRevitPanel.dockAccess as IDockPanelWpfView).GetViewElement() as Page;
-
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiapp = commandData.Application;
 
-            AtomRevitPanel.ShowPanel(uiapp);            
+            AtomRevitPanel.ShowPanel(uiapp);
+            
+            InvokeDockPageUpdate();
+
+            InvokeDockViewModelUpdate();
 
             return Result.Succeeded;
         }

@@ -18,6 +18,8 @@ using Autodesk.Revit.UI.Events;
 
 using static DockApplicationBase.ExecuteProvider;
 using Autodesk.Revit.ApplicationServices;
+using System.Windows;
+using Application = Autodesk.Revit.ApplicationServices.Application;
 
 namespace AtomRevitPanel
 {
@@ -82,18 +84,6 @@ namespace AtomRevitPanel
             return Result.Succeeded;
         }
 
-        private void ControlledApplication_DocumentOpened(object sender, DocumentOpenedEventArgs e)
-        {
-            Application app = (Application)sender;
-
-            //TaskDialog.Show("Controlled application Document opened", count.ToString());
-            if (app.Documents.Size == 1)
-            {
-                DefineExternalExecute(ShowPanel);
-                ExternalExecuteCaller.Raise();
-            }
-        }
-
 
         /* методя для передачи с делегатом DefineExternalExecute
          * будет вызваться вне контекста приложения
@@ -155,6 +145,16 @@ namespace AtomRevitPanel
         {
             if(AtomRevitPanel.RunExternalExecute != null)
             {
+                if (false) // для проверки если будет надо
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach(var item in AtomRevitPanel.RunExternalExecute.GetInvocationList())
+                    {
+                        sb.Append($"{item.GetMethodInfo().DeclaringType}.{item.GetMethodInfo().Name}\n");
+                    }
+                    MessageBox.Show(sb.ToString());
+                }
+
                 // запуск переданного извне контекста Revit метода
                 AtomRevitPanel.RunExternalExecute.Invoke(app);
             }

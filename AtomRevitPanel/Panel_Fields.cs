@@ -25,7 +25,8 @@ namespace AtomRevitPanel
 {
     public partial class AtomRevitPanel : IExternalApplication
     {
-        public static IMainDockPanel dockAccess;
+        public static IDockPanel dockView;
+        public static IDockViewModel dockViewModel;
         public static bool firstOpenDone = false;
 
         public static Guid dockPanelGuid = new Guid("ABF5C50F-A592-43DB-9DC4-8017CCBE3E0D");
@@ -50,37 +51,52 @@ namespace AtomRevitPanel
             get { return ribbonPanel; }
             private set { ribbonPanel = value; }
         }
-
-        private string assemblyPath;
-        public string AssemblyPath
+        
+        // используется в определении Ribbon Tab
+        private string applicationEntryAssemblyPath;
+        public string ApplicationEntryAssemblyPath
         {
-            get { return assemblyPath; }
-            private set { assemblyPath = value; }
+            get { return applicationEntryAssemblyPath; }
+            private set { applicationEntryAssemblyPath = value; }
         }
 
-        private Assembly addinEntryAssembly;
-        public Assembly AddinEntryAssembly
+        // используется в определении Ribbon Tab
+        private Assembly applicationEntryAssembly;
+        public Assembly ApplicationEntryAssembly
         {
-            get { return addinEntryAssembly; }
-            private set { addinEntryAssembly = value; }
+            get { return applicationEntryAssembly; }
+            private set { applicationEntryAssembly = value; }
         }
 
-        /* поле с "запасом" - возможно, в будущем
-         * я буду применять более "чистую" архитектуру
-         * тогда понадобится переменная для сборки
-         * с интерфейсом приложения
-         */
-        private Assembly windowPanelAssembly;
-        public Assembly WindowPanelAssembly
-        {
-            get { return windowPanelAssembly; }
-            private set { windowPanelAssembly = value; }
-        }
-
+        // используется в поиске картинок и
+        // регистрации кнопок на панели
         public string NameSpace
         {
-            get { return GetType().Namespace; }            
+            get { return GetType().Namespace; }
         }
+
+        //
+        private Assembly dockPanelAssembly;
+        public Assembly DockPanelAssembly
+        {
+            get { return dockPanelAssembly; }
+            private set { dockPanelAssembly = value; }
+        }
+
+        private Type dockPanelViewType;
+        public Type DockPanelViewType
+        {
+            get { return dockPanelViewType; }
+            set { dockPanelViewType = value; }
+        }
+
+        private Type dockPanelViewModelType;
+        public Type DockPanelViewModelType
+        {
+            get { return dockPanelViewModelType; }
+            set { dockPanelViewModelType = value; }
+        }
+
 
     }
 }

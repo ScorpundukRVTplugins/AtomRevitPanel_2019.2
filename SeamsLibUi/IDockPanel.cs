@@ -10,12 +10,14 @@ using System.Windows.Controls;
 
 namespace DockApplicationBase
 {
-    public interface IMainDockPanel
+    public interface IDockPanel
     {
         IDockablePaneProvider GetDockProvider();
-        IDockPanelWpfView GetDockPage();
-        IDockPanelWpfView GetAddinControl();
+        IDockAddinControl GetAddinControl();
+        IDockViewModel GetDockViewModel();
         void RemoveAddinControl();
         void AddAddinControl();
+        void SetupDockView(IDockViewModel viewModel);
+        void ResetDockView();
     }
 }

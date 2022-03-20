@@ -9,10 +9,10 @@ using Autodesk.Revit.UI;
 
 namespace DockApplicationBase
 {
-    public interface IDockPanelWpfView
+    public interface IDockAddinControl
     {
-        IViewUpdater GetViewUpdater();
-        IViewUpdater GetViewModelUpdater();
-        object GetViewElement();
+        IDockViewModel GetAddinViewModel();
+        void SetupAddinView(IDockViewModel viewModel);
+        void ResetAddinView();
     }
 }

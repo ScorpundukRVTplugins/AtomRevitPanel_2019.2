@@ -30,7 +30,7 @@ namespace PanelView
     /// <summary>
     /// Логика взаимодействия для MainPage.xaml
     /// </summary>    
-    public partial class MainPage : Page, IDockablePaneProvider, IMainDockPanel, IDockPanelWpfView, IViewUpdater
+    public partial class MainPage : Page, IDockablePaneProvider, IDockPanel, IViewElementUpdater
     {
         private Assembly addinControlAssembly = null;
         private UserControl addinControl = null;
@@ -38,8 +38,6 @@ namespace PanelView
         public MainPage()
         {
             InitializeComponent();
-            ViewModel = new MainPageViewModel();
-            DataContext = viewModel;
         }
 
         private MainPageViewModel viewModel;
@@ -49,15 +47,13 @@ namespace PanelView
             set { viewModel = value; }
         }
 
-        public object GetViewElement()
-        {
-            return this;
-        }
+        #region IDockElementUpdater
 
         public void ExecuteUpdate()
         {
             DefineExternalExecute(UpdateState);
-            ExternalExecuteCaller.Raise();
+            if (!ExternalExecuteCaller.IsPending)
+                ExternalExecuteCaller.Raise();
         }
 
         public void UpdateState(UIApplication uiapplication)
@@ -72,25 +68,123 @@ namespace PanelView
             viewName.Text = doc.ActiveView.Name;
         }
 
-        public void UnhookAllBinds()
+        #endregion
+
+        #region IDockablePaneProvider implementation
+
+        public void SetupDockablePane(DockablePaneProviderData data)
         {
+            data.FrameworkElement = this as FrameworkElement;
+            data.InitialState = new DockablePaneState()
+            {
+                DockPosition = DockPosition.Tabbed,
+                TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser,
+            };
+            data.VisibleByDefault = false;
+        }
+
+        #endregion
+
+        #region IDockPanel implementation
+
+        public IDockablePaneProvider GetDockProvider()
+        {
+            return this as IDockablePaneProvider;
+        }
+
+        public IDockAddinControl GetAddinControl()
+        {
+            return addinControl as IDockAddinControl;
+        }
+
+        public IDockViewModel GetDockViewModel()
+        {
+            return ViewModel as IDockViewModel;
+        }
+
+        public void RemoveAddinControl()
+        {
+            try
+            {
+                (addinControl as IDockAddinControl).ResetAddinView();
+            }
+            catch (Exception exc)
+            {
+                TaskDialog.Show("Type cast error", exc.Message);
+            }
+            panelGrid.Children.Remove(addinControl);
+            addinControl = null;
+            addinControlAssembly = null;
+        }
+
+        public void AddAddinControl()
+        {
+            //https://stackoverflow.com/questions/123391/how-to-unload-an-assembly-from-the%20-primary-appdomain
+
+            string assemblyPath = "";
+            try
+            {
+                OpenFileDialog fileDialog = new OpenFileDialog();
+                if (fileDialog.ShowDialog() == true)
+                {
+                    assemblyPath = fileDialog.FileName;
+                }
+            }
+            catch (Exception e)
+            {
+                TaskDialog.Show("Open file exception:", e.Message);
+            }
+
+            try
+            {
+                addinControlAssembly = Assembly.Load(File.ReadAllBytes(assemblyPath));
+            }
+            catch (Exception e)
+            {
+                TaskDialog.Show("Assembly info error", e.Message);
+            }
+
+            Type typeOfcontrol = addinControlAssembly.DefinedTypes
+                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IDockAddinControl))).First();
+
+            Type typeOfViewModel = addinControlAssembly.DefinedTypes
+                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IDockViewModel))).First();
+
+            if (typeOfcontrol != null)
+            {
+                IDockAddinControl controlView
+                    = Activator.CreateInstance(typeOfcontrol) as IDockAddinControl;
+
+                IDockViewModel controlViewModel
+                    = Activator.CreateInstance(typeOfViewModel) as IDockViewModel;
+
+                controlView.SetupAddinView(controlViewModel);
+
+                addinControl = controlView as UserControl;
+                panelGrid.Children.Add(addinControl);
+                System.Windows.Controls.Grid.SetRow(addinControl, 1);
+
+                InvokeAddinControlUpdate();
+                InvokeAddinViewModelUpdate();
+            }
+        }
+
+        public void SetupDockView(IDockViewModel viewModel)
+        {
+            ViewModel = viewModel as MainPageViewModel;
+            DataContext = ViewModel;
+            UpdateDockPage += ExecuteUpdate;
+            UpdateDockViewModel += ViewModel.ExecuteUpdate;
+        }
+
+        public void ResetDockView()
+        {
+            UpdateDockPage -= ExecuteUpdate;
+            UpdateDockViewModel -= ViewModel.ExecuteUpdate;
             DataContext = null;
             ViewModel = null;
         }
 
-        public IDockPanelWpfView GetAddinControl()
-        {
-            return addinControl as IDockPanelWpfView;
-        }
-
-        public IViewUpdater GetViewUpdater()
-        {
-            return this as IViewUpdater;
-        }
-
-        public IViewUpdater GetViewModelUpdater()
-        {
-            return ViewModel as IViewUpdater;
-        }
+        #endregion
     }
 }

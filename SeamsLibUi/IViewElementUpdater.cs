@@ -8,10 +8,9 @@ using Autodesk.Revit.UI;
 
 namespace DockApplicationBase
 {
-    public interface IViewUpdater
+    public interface IViewElementUpdater
     {
         void ExecuteUpdate();
         void UpdateState(UIApplication uiapplication);
-        void UnhookAllBinds();
     }
 }

@@ -55,7 +55,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Obsolete\ObsoleterMethods.cs" />
     <Compile Include="Panel.cs" />
+    <Compile Include="Panel_EventHandlers.cs" />
     <Compile Include="Panel_Fields.cs" />
     <Compile Include="Panel_RegisterDock.cs" />
     <Compile Include="Panel_RibbonCreateMethods.cs" />

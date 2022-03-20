@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 
 namespace SampleDoorsWindowsKKS
 {
-    public partial class ControlViewModel : ViewModelBase, IViewUpdater
+    public partial class ControlViewModel : ViewModelBase, IDockViewModel, IViewElementUpdater
     {
         public ControlViewModel() : base()
         {
@@ -28,17 +28,13 @@ namespace SampleDoorsWindowsKKS
         public void ExecuteUpdate()
         {
             DefineExternalExecute(UpdateState);
-            ExternalExecuteCaller.Raise();
+            if (!ExternalExecuteCaller.IsPending)
+                ExternalExecuteCaller.Raise();
         }
         
         public void UpdateState(UIApplication uiapplication)
         {
             CollectDoors(uiapplication);
-        }
-
-        public void UnhookAllBinds()
-        {
-            
         }
     }
 }

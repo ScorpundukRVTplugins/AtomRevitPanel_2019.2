@@ -26,13 +26,11 @@ namespace SampleDoorsWindowsKKS
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class DoorsWindowsKksControl : UserControl, IDockPanelWpfView, IViewUpdater
+    public partial class DoorsWindowsKksControl : UserControl, IDockAddinControl, IViewElementUpdater
     {
         public DoorsWindowsKksControl()
         {
-            InitializeComponent();
-            ViewModel = new ControlViewModel();
-            DataContext = ViewModel;
+            InitializeComponent();            
         }
 
         private ControlViewModel viewModel;
@@ -42,10 +40,13 @@ namespace SampleDoorsWindowsKKS
             set { viewModel = value; }
         }
 
+        #region IDockPanelUpdater
+
         public void ExecuteUpdate()
         {
             DefineExternalExecute(UpdateState);
-            ExternalExecuteCaller.Raise();
+            if (!ExternalExecuteCaller.IsPending)
+                ExternalExecuteCaller.Raise();
         }
 
         public void UpdateState(UIApplication uiapplication)
@@ -53,29 +54,33 @@ namespace SampleDoorsWindowsKKS
             UIDocument uidoc = uiapplication.ActiveUIDocument;
             var app = uiapplication.Application;
             Document doc = uidoc.Document;
+        }        
+
+        #endregion
+
+        #region IAddinControl
+
+        public IDockViewModel GetAddinViewModel()
+        {
+            return ViewModel as IDockViewModel;
         }
 
-
-        public object GetViewElement()
+        public void SetupAddinView(IDockViewModel viewModel)
         {
-            return this;
-        }
+            ViewModel = viewModel as ControlViewModel;
+            DataContext = ViewModel;
+            UpdateAddinControl += ExecuteUpdate;
+            UpdateAddinViewModel += ViewModel.ExecuteUpdate;
+        }        
 
-        public void UnhookAllBinds()
+        public void ResetAddinView()
         {
-            ViewModel.UnhookAllBinds();
+            UpdateAddinControl -= ExecuteUpdate;
+            UpdateAddinViewModel -= ViewModel.ExecuteUpdate;
             DataContext = null;
             ViewModel = null;
         }
 
-        public IViewUpdater GetViewModelUpdater()
-        {
-            return ViewModel as IViewUpdater;
-        }
-
-        public IViewUpdater GetViewUpdater()
-        {
-            return this as IViewUpdater;
-        }
+        #endregion 
     }
 }

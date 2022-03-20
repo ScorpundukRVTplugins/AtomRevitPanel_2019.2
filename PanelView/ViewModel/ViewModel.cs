@@ -12,17 +12,20 @@ using Autodesk.Revit.UI;
 
 namespace PanelView
 {
-    public class MainPageViewModel : ViewModelBase, IViewUpdater
+    public class MainPageViewModel : ViewModelBase, IViewElementUpdater, IDockViewModel
     {
         public MainPageViewModel() : base()
         {
 
         }
 
+        #region IDockPanelUpdater implementation
+
         public void ExecuteUpdate()
         {
             DefineExternalExecute(UpdateState);
-            ExternalExecuteCaller.Raise();
+            if (!ExternalExecuteCaller.IsPending)
+                ExternalExecuteCaller.Raise();
         }
 
         public void UpdateState(UIApplication uiapplication)
@@ -30,9 +33,11 @@ namespace PanelView
             
         }
 
-        public void UnhookAllBinds()
-        {
+        #endregion
 
-        }
+        #region IDockViewModel implementation
+
+
+        #endregion
     }
 }

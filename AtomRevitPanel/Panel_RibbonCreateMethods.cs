@@ -40,9 +40,9 @@ namespace AtomRevitPanel
             // create a ribbon panel
             RibbonPanel = application.CreateRibbonPanel(Tab.AddIns, "Atomic tools");
             // assembly
-            AddinEntryAssembly = Assembly.GetExecutingAssembly();
+            ApplicationEntryAssembly = Assembly.GetExecutingAssembly();
             // assembly path
-            AssemblyPath = AddinEntryAssembly.Location;
+            ApplicationEntryAssemblyPath = ApplicationEntryAssembly.Location;
         }
 
         public void AddButtonOnRibbon(
@@ -57,7 +57,7 @@ namespace AtomRevitPanel
             PushButtonData pushButtonData = new PushButtonData(
                 name,
                 text,
-                AssemblyPath,
+                ApplicationEntryAssemblyPath,
                 $"{NameSpace}.{commandClassType.Name}"
                 );
 
@@ -78,12 +78,12 @@ namespace AtomRevitPanel
             // register button icon images
             registerButton.LargeImage = 
                 GetResourceImage(
-                    AddinEntryAssembly, 
+                    ApplicationEntryAssembly, 
                     $"{NameSpace}.Resources.{largeImageName}");
 
             registerButton.Image = 
                 GetResourceImage(
-                    AddinEntryAssembly,
+                    ApplicationEntryAssembly,
                     $"{NameSpace}.Resources.{imageName}");
         }
     }
