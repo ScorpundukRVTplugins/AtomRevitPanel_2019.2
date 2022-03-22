@@ -32,12 +32,12 @@ namespace PanelView
     {
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            AddAddinControl();
+            AddDockControl();
         }
 
         private void removeAddin_Click(object sender, RoutedEventArgs e)
         {
-            RemoveAddinControl();
+            RemoveDockControl();
         }
 
         private void externalEventRise_Click(object sender, RoutedEventArgs e)

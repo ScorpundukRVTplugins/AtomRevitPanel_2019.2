@@ -14,24 +14,23 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel
-            Grid.Row="0"
-            >
+        <StackPanel Grid.Row="0">
             <Button
                 x:Name="showAllDoors"
                 Command="{Binding CollectDoorsCmd}"
                 Content="Collect doors" />
-            <Button x:Name="undefined1" Content="Check Context" Command="{Binding CheckContextCmd}" />
+            <Button
+                x:Name="undefined1"
+                Command="{Binding CheckContextCmd}"
+                Content="Check Context" />
             <Button x:Name="undefined2" Content="undefined2" />
-            <TextBlock x:Name="countOfDoors" Text="{Binding CountOfDoors, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>            
+            <TextBlock x:Name="countOfDoors" Text="{Binding CountOfDoors, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
-        <Grid
-            Grid.Row="1"
-            >
-            <DataGrid VerticalScrollBarVisibility="Visible" ItemsSource="{Binding DoorsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <Grid Grid.Row="1">
+            <DataGrid ItemsSource="{Binding DoorsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Visible" />
         </Grid>
     </Grid>
 </UserControl>

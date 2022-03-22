@@ -30,7 +30,7 @@ namespace PanelView
     /// <summary>
     /// Логика взаимодействия для MainPage.xaml
     /// </summary>    
-    public partial class MainPage : Page, IDockablePaneProvider, IDockPanel, IViewElementUpdater
+    public partial class MainPage : Page, IDockablePaneProvider, IDockPage, IDockElementUpdater
     {
         private Assembly addinControlAssembly = null;
         private UserControl addinControl = null;
@@ -87,26 +87,26 @@ namespace PanelView
 
         #region IDockPanel implementation
 
-        public IDockablePaneProvider GetDockProvider()
+        public IDockablePaneProvider GetDockPageProvider()
         {
             return this as IDockablePaneProvider;
         }
 
-        public IDockAddinControl GetAddinControl()
+        public IDockControl GetDockControl()
         {
-            return addinControl as IDockAddinControl;
+            return addinControl as IDockControl;
         }
 
-        public IDockViewModel GetDockViewModel()
+        public IDockViewModel GetDockPageViewModel()
         {
             return ViewModel as IDockViewModel;
         }
 
-        public void RemoveAddinControl()
+        public void RemoveDockControl()
         {
             try
             {
-                (addinControl as IDockAddinControl).ResetAddinView();
+                (addinControl as IDockControl).ResetDockControl();
             }
             catch (Exception exc)
             {
@@ -117,7 +117,7 @@ namespace PanelView
             addinControlAssembly = null;
         }
 
-        public void AddAddinControl()
+        public void AddDockControl()
         {
             //https://stackoverflow.com/questions/123391/how-to-unload-an-assembly-from-the%20-primary-appdomain
 
@@ -145,20 +145,20 @@ namespace PanelView
             }
 
             Type typeOfcontrol = addinControlAssembly.DefinedTypes
-                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IDockAddinControl))).First();
+                .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IDockControl))).First();
 
             Type typeOfViewModel = addinControlAssembly.DefinedTypes
                 .Where(typeinfo => typeinfo.GetInterfaces().Contains(typeof(IDockViewModel))).First();
 
             if (typeOfcontrol != null)
             {
-                IDockAddinControl controlView
-                    = Activator.CreateInstance(typeOfcontrol) as IDockAddinControl;
+                IDockControl controlView
+                    = Activator.CreateInstance(typeOfcontrol) as IDockControl;
 
                 IDockViewModel controlViewModel
                     = Activator.CreateInstance(typeOfViewModel) as IDockViewModel;
 
-                controlView.SetupAddinView(controlViewModel);
+                controlView.SetupDockControl(controlViewModel);
 
                 addinControl = controlView as UserControl;
                 panelGrid.Children.Add(addinControl);
@@ -169,7 +169,7 @@ namespace PanelView
             }
         }
 
-        public void SetupDockView(IDockViewModel viewModel)
+        public void SetupDockPage(IDockViewModel viewModel)
         {
             ViewModel = viewModel as MainPageViewModel;
             DataContext = ViewModel;
@@ -177,7 +177,7 @@ namespace PanelView
             UpdateDockViewModel += ViewModel.ExecuteUpdate;
         }
 
-        public void ResetDockView()
+        public void ResetDockPage()
         {
             UpdateDockPage -= ExecuteUpdate;
             UpdateDockViewModel -= ViewModel.ExecuteUpdate;

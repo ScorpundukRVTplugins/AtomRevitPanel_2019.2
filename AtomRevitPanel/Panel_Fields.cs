@@ -25,7 +25,7 @@ namespace AtomRevitPanel
 {
     public partial class AtomRevitPanel : IExternalApplication
     {
-        public static IDockPanel dockView;
+        public static IDockPage dockView;
         public static IDockViewModel dockViewModel;
         public static bool firstOpenDone = false;
 

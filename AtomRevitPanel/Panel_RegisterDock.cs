@@ -35,9 +35,9 @@ namespace AtomRevitPanel
 
             try
             {
-                dockView = Activator.CreateInstance(DockPanelViewType) as IDockPanel;
+                dockView = Activator.CreateInstance(DockPanelViewType) as IDockPage;
                 dockViewModel = Activator.CreateInstance(DockPanelViewModelType) as IDockViewModel;
-                dockView.SetupDockView(dockViewModel);
+                dockView.SetupDockPage(dockViewModel);
             }
             catch(Exception exc)
             {
@@ -53,7 +53,7 @@ namespace AtomRevitPanel
                     (
                         dockId,
                         "Atom Revit Panel",
-                        dockView.GetDockProvider()
+                        dockView.GetDockPageProvider()
                     );
             }
             catch (Exception ex)
@@ -84,7 +84,7 @@ namespace AtomRevitPanel
                 try
                 {
                     dockPanelViewType = (from t in dockPanelAssembly.DefinedTypes
-                                         where t.GetInterfaces().Contains(typeof(IDockPanel))
+                                         where t.GetInterfaces().Contains(typeof(IDockPage))
                                          select t).First();
                     DockPanelViewType = dockPanelViewType;
                 }

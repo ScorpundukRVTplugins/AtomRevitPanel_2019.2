@@ -31,7 +31,7 @@ namespace AtomRevitPanel
          * может содержаться и в других сборках
          * но не будет подходить к данному приложению
          */
-        public IDockPanel FindPanelViewAssembly()
+        public IDockPage FindPanelViewAssembly()
         {
             string addinAssembly = Assembly.GetExecutingAssembly().Location;
             string addinFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
@@ -46,14 +46,14 @@ namespace AtomRevitPanel
                 try
                 {
                     mainPanelViewType = (from t in dockPanelAssembly.DefinedTypes
-                                         where t.GetInterfaces().Contains(typeof(IDockPanel))
+                                         where t.GetInterfaces().Contains(typeof(IDockPage))
                                          select t).First();
                 }
                 catch { }
 
                 if (mainPanelViewType != null && mainPanelViewType.BaseType == typeof(Page))
                 {
-                    return Activator.CreateInstance(mainPanelViewType) as IDockPanel;
+                    return Activator.CreateInstance(mainPanelViewType) as IDockPage;
                 }
             }
             return null;

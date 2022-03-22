@@ -3,38 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 using System.ComponentModel;
 
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.ApplicationServices;
 
 using DockApplicationBase;
-using static DockApplicationBase.ExecuteProvider;
 using MVVM;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+
+using static DockApplicationBase.ExecuteProvider;
 
 namespace SampleDoorsWindowsKKS
 {
     public partial class ControlViewModel : ViewModelBase, IDockViewModel, IDockElementUpdater
     {
-        public ControlViewModel() : base()
-        {
+        Category cat;
+        Element elem;
+        Room room;
+        Location loc;
+        LocationPoint locPo;
 
-        }
-
-        public void ExecuteUpdate()
+            public void Method()
         {
-            DefineExternalExecute(UpdateState);
-            if (!ExternalExecuteCaller.IsPending)
-                ExternalExecuteCaller.Raise();
-        }
-        
-        public void UpdateState(UIApplication uiapplication)
-        {
-            CollectDoors(uiapplication);
         }
     }
 }

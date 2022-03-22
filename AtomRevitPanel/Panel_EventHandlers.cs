@@ -56,7 +56,7 @@ namespace AtomRevitPanel
         {
             InvokeDockPageUpdate();
             InvokeDockViewModelUpdate();
-            if (dockView.GetAddinControl() != null)
+            if (dockView.GetDockControl() != null)
             {
                 InvokeAddinControlUpdate();
                 InvokeAddinViewModelUpdate();
@@ -76,7 +76,7 @@ namespace AtomRevitPanel
         {
             InvokeAddinControlUpdate();
             InvokeAddinViewModelUpdate();
-            if (dockView.GetAddinControl() != null)
+            if (dockView.GetDockControl() != null)
             {
                 InvokeAddinControlUpdate();
                 InvokeAddinViewModelUpdate();

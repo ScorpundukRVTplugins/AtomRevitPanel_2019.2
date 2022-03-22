@@ -12,7 +12,7 @@ using Autodesk.Revit.UI;
 
 namespace PanelView
 {
-    public class MainPageViewModel : ViewModelBase, IViewElementUpdater, IDockViewModel
+    public class MainPageViewModel : ViewModelBase, IDockElementUpdater, IDockViewModel
     {
         public MainPageViewModel() : base()
         {

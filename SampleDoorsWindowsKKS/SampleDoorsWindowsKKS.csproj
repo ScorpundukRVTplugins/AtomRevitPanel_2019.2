@@ -57,6 +57,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlViewModel.Functions.cs" />
     <Compile Include="ViewModel\Cmd_CheckContext.cs" />
     <Compile Include="ViewModel\ControlViewModel_ViewStateData.cs" />
     <Page Include="DoorsWindowsKksControl.xaml">

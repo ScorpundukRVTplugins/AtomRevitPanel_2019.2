@@ -26,7 +26,7 @@ namespace SampleDoorsWindowsKKS
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class DoorsWindowsKksControl : UserControl, IDockAddinControl, IViewElementUpdater
+    public partial class DoorsWindowsKksControl : UserControl, IDockControl, IDockElementUpdater
     {
         public DoorsWindowsKksControl()
         {
@@ -60,12 +60,12 @@ namespace SampleDoorsWindowsKKS
 
         #region IAddinControl
 
-        public IDockViewModel GetAddinViewModel()
+        public IDockViewModel GetDockControlViewModel()
         {
             return ViewModel as IDockViewModel;
         }
 
-        public void SetupAddinView(IDockViewModel viewModel)
+        public void SetupDockControl(IDockViewModel viewModel)
         {
             ViewModel = viewModel as ControlViewModel;
             DataContext = ViewModel;
@@ -73,7 +73,7 @@ namespace SampleDoorsWindowsKKS
             UpdateAddinViewModel += ViewModel.ExecuteUpdate;
         }        
 
-        public void ResetAddinView()
+        public void ResetDockControl()
         {
             UpdateAddinControl -= ExecuteUpdate;
             UpdateAddinViewModel -= ViewModel.ExecuteUpdate;
