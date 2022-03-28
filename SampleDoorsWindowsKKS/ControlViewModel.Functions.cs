@@ -24,14 +24,6 @@ namespace SampleDoorsWindowsKKS
 {
     public partial class ControlViewModel : ViewModelBase, IDockViewModel, IDockElementUpdater
     {
-        Category cat;
-        Element elem;
-        Room room;
-        Location loc;
-        LocationPoint locPo;
-
-            public void Method()
-        {
-        }
+        Line ln;
     }
 }
