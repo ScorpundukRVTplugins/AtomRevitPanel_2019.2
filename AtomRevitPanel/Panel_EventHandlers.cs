@@ -28,6 +28,8 @@ namespace AtomRevitPanel
     {
         public void ControlledApplication_DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
+            if (!UpdateAllowed) return;
+
             Application app = (Application)sender;
             //TaskDialog.Show("Controlled application Document opened", count.ToString());
             if (app.Documents.Size == 1)
@@ -54,6 +56,8 @@ namespace AtomRevitPanel
          */
         public static void Application_ViewActivated(object sender, ViewActivatedEventArgs e)
         {
+            if (!UpdateAllowed) return;
+
             InvokeDockPageUpdate();
             InvokeDockViewModelUpdate();
             if (dockView.GetDockControl() != null)
@@ -69,11 +73,13 @@ namespace AtomRevitPanel
          */
         public static void Application_DocumentOpened(object sender, DocumentOpenedEventArgs e)
         {
-
+            if (!UpdateAllowed) return;
         }
 
         public static void DocumentChangedHandler(object sender, DocumentChangedEventArgs e)
         {
+            if (!UpdateAllowed) return;
+
             InvokeAddinControlUpdate();
             InvokeAddinViewModelUpdate();
             if (dockView.GetDockControl() != null)

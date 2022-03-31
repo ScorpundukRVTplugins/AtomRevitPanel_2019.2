@@ -66,6 +66,8 @@ namespace AtomRevitPanel
 
             DefineExternalExecute += DefineExecute;
 
+            
+
             // определение статического ExternalEvent
             try
             {
@@ -80,6 +82,27 @@ namespace AtomRevitPanel
             if (!DockPanelRegister(application)) return Result.Failed;
 
             application.ControlledApplication.DocumentOpened += ControlledApplication_DocumentOpened;
+
+            DisableUpdate += () =>
+            {
+                UpdateAllowed = false;
+            };
+
+            AllowUpdate += () =>
+            {
+                UpdateAllowed = true;
+            };
+
+            ForceUpdate += () =>
+            {
+                InvokeDockPageUpdate();
+                InvokeDockViewModelUpdate();
+                if (dockView.GetDockControl() != null)
+                {
+                    InvokeAddinControlUpdate();
+                    InvokeAddinViewModelUpdate();
+                }
+            };
 
             return Result.Succeeded;
         }

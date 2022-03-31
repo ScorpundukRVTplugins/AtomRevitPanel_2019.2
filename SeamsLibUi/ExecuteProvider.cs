@@ -50,6 +50,47 @@ namespace DockApplicationBase
                 }
             }
         }
-        private static bool isCallerDefined = false;        
+        private static bool isCallerDefined = false;
+
+
+        private static Action disableUpdate;
+        public static Action DisableUpdate 
+        { 
+            get { return disableUpdate; }
+            set
+            {
+                if (disableUpdate == null)
+                {
+                    disableUpdate = value;
+                   
+                }
+            }
+        }
+
+        private static Action allowUpdate;
+        public static Action AllowUpdate
+        {
+            get { return allowUpdate; }
+            set
+            {
+                if (allowUpdate == null)
+                {
+                    allowUpdate = value;                    
+                }
+            }
+        }
+
+        private static Action forceUpdate;
+        public static Action ForceUpdate
+        {
+            get { return forceUpdate; }
+            set
+            {
+                if(ForceUpdate == null)
+                {
+                    forceUpdate = value;
+                }
+            }
+        }
     }
 }

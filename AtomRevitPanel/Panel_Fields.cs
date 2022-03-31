@@ -42,6 +42,16 @@ namespace AtomRevitPanel
             set;
         }
 
+        /* в определённые моменты реакция на события обновления не желательна
+         * переменна сидит в обработчиках событий
+         */
+        private static bool updateAllowed = true;
+        public static bool UpdateAllowed
+        {
+            get { return updateAllowed; }
+            set { updateAllowed = value; }
+        }
+
         /* Раздел вкладки приложения
          * 
          */
@@ -96,7 +106,5 @@ namespace AtomRevitPanel
             get { return dockPanelViewModelType; }
             set { dockPanelViewModelType = value; }
         }
-
-
     }
 }
